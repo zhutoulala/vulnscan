@@ -8,17 +8,27 @@
 
 #include "binary_file.h"
 
-#include "clang/CodeGen/CodeGenAction.h"
-#include "clang/Frontend/CompilerInstance.h"
-
 #include <iostream>
-using namespace std;
+
+void printUsage() {
+	std::cout << "vulnscan [path to file]\n";
+}
+
 
 int main(int argc, char **argv) {
 
-    BinaryFile target(argv[1]);
-    return target.scan();
+	if (argc < 2) {
+		printUsage();
+		return -1;
+	}
 
+	std::string sTargetPath(argv[1]);
+    BinaryFile target(sTargetPath);
+    target.scan();
+	target.printResult();
+	return 0;
+
+	/*
     std::string inputFile = argv[1];
     clang::CompilerInstance compInst;
 
@@ -29,6 +39,7 @@ int main(int argc, char **argv) {
     codegenAction.EndSourceFile();
 
     llvm::Module* module = codegenAction.takeModule();
+	*/
 
-    return 0;
+    //return 0;
 }

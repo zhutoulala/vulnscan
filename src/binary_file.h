@@ -1,4 +1,8 @@
-#include "llvm/Support/MemoryBuffer.h"
+#pragma once
+
+#include <string>
+
+#include "scan_results.h"
 
 class BinaryFile {
 
@@ -6,26 +10,23 @@ public:
     enum class FORMAT {
         EXE, //windows
         ELF, //linux
-        NONPE
+        UNKNOWN
     };
 
 private:
     FORMAT format;
     std::string sFilePath;
+	bool scanned;
+	SCAN_RESULT sr;
 
 public:
     BinaryFile();
-    BinaryFile(const std::string& sFilePath);
+    BinaryFile(std::string& sFilePath);
 
 public:
-    int scan();
-    FORMAT getBinaryFormat();
+    void scan();
+	void printResult();
 
-
-private:
-    int scanELF();
-    int scanEXE():
-
-    llvm::MemoryBuffer* getCodeSection();
+    //llvm::MemoryBuffer* getCodeSection();
 
 };
