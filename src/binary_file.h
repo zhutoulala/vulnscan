@@ -6,15 +6,7 @@
 
 class BinaryFile {
 
-public:
-    enum class FORMAT {
-        EXE, //windows
-        ELF, //linux
-        UNKNOWN
-    };
-
 private:
-    FORMAT format;
     std::string sFilePath;
 	bool scanned;
 	SCAN_RESULT sr;

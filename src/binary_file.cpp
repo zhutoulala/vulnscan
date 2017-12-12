@@ -3,12 +3,8 @@
 #include <iostream>
 
 
-BinaryFile::BinaryFile() : scanned(false), format(FORMAT::UNKNOWN){
-	
-}
-
 BinaryFile::BinaryFile(std::string& sFilePath) : 
-	scanned(false), format(FORMAT::UNKNOWN), sFilePath(sFilePath){
+	scanned(false), sFilePath(sFilePath){
 	
 }
 

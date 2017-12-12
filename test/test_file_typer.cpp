@@ -5,7 +5,9 @@
 
 TEST(FileTyper, isBinary)
 {
-	std::string test("test");
-	FileTyper typer(test);
-    EXPECT_EQ(typer.isBinary(), true);
+	std::string text("data\\1.txt");
+	FileTyper typer(text);
+	typer.typing();
+
+    EXPECT_EQ(typer.isBinary(), false);
 }
