@@ -16,13 +16,11 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/src
     )
 
-add_library(
-    BinaryFile
+add_executable(
+    ${PROJECT_NAME}
+	src/file_typer.cpp
     src/binary_file.cpp
-    )
-add_library(
-    FileTyper
-    src/file_typer.cpp
+	src/vulnscan.cpp
     )
 
 set(GOOGLETEST_ROOT external/googletest/googletest CACHE STRING "Google Test source root")

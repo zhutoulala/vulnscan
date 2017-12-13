@@ -2,30 +2,32 @@
 #include <stdio.h>
 
 FileTyper::FileTyper(std::string& sFilePath) : sFilePath(sFilePath), type(TYPE::UNKNOWN){
+	typing();
 }
 
 void FileTyper::typing() {
-	
-	FILE * pFile = fopen(sFilePath.c_str(), "rb");
-	if (pFile == NULL) {
-		perror("Error opening file");
+	FILE *pFile;
+	if (fopen_s(&pFile, sFilePath.c_str(), "rb") != 0 || !pFile) {
+		perror("Failed to read file\n");
 		return;
 	}
-	
 	uint8_t firstByte = getc(pFile);
-	if ((firstByte == 'M') && (getc(pFile) == 'Z')) {
-		type = TYPE::EXE;
+	if (firstByte == 'M') {
+		if (getc(pFile) == 'Z') {
+			type = TYPE::EXE;
+		}
 	}
-	else if ((firstByte == 0x7f) && (getc(pFile) == 'E') && (getc(pFile) == 'L') && (getc(pFile) == 'F')) {
-		type = TYPE::ELF;
+	else if (firstByte == 0x7f) {
+		if ((getc(pFile) == 'E') && (getc(pFile) == 'L' && (getc(pFile) == 'F'))) {
+			type = TYPE::ELF;
+		}
 	}
-
 	else { 
 		// a quick dirty way to check if file is binary
-		// check if there is any NUL character in first 100 bytes
+		// check if there is any NUL character in the first 100 bytes
 		size_t checkLength = 100;
 		for (size_t i = 0; i < checkLength; i++) {
-			if (getc(pFile) == '\n') {
+			if (getc(pFile) == '\0') {
 				type = TYPE::BIN;
 				break;
 			}
@@ -35,8 +37,4 @@ void FileTyper::typing() {
 		}
 	}
 	fclose(pFile);
-}
-
-bool FileTyper::isBinary() {
-	return type != TYPE::TEXT;
 }
