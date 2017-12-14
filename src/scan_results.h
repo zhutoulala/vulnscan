@@ -1,8 +1,6 @@
 #pragma once
 
-#ifndef SCAN_RESULT_H
-#define SCAN_RESULT_H
-
+#include <string>
 typedef long SCAN_RESULT;
 
 #define SCAN_RESULT_SUCCESS 0x00000000
@@ -23,5 +21,3 @@ static std::string scanResultToString(SCAN_RESULT sr) {
 		default: return "Invalid scan result";
 	}
 }
-
-#endif //SCAN_RESULT_H

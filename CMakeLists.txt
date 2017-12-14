@@ -19,7 +19,9 @@ include_directories(
 add_executable(
     ${PROJECT_NAME}
 	src/file_typer.cpp
-    src/binary_file.cpp
+	src/binary_file.cpp
+	src/vuln_report.cpp
+	src/vulnerability.cpp
 	src/vulnscan.cpp
     )
 

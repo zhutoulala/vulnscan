@@ -1,32 +1,24 @@
 #pragma once
 
-#ifndef BINARY_FILE_H
-#define BINARY_FILE_H
-
-#include <string>
-
 #include "scan_results.h"
+#include "vuln_report.h"
+#include <string>
 
 class BinaryFile {
 
 private:
     std::string sFilePath;
 	bool scanned;
-	SCAN_RESULT sr;
 
 public:
-    BinaryFile();
     BinaryFile(std::string& sFilePath);
 
 public:
-    void scan();
-	void printResult();
+	SCAN_RESULT scan(VulnReport** pReport);
 
     //llvm::MemoryBuffer* getCodeSection();
 private:
-	void scanEXE();
-	void scanELF();
+	SCAN_RESULT scanEXE(VulnReport** pReport);
+	SCAN_RESULT scanELF(VulnReport** pReport);
 	
 };
-
-#endif //BINARY_FILE_H

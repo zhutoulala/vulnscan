@@ -7,7 +7,8 @@
 //============================================================================
 
 #include "binary_file.h"
-
+#include "scan_results.h"
+#include "vuln_report.h"
 #include <iostream>
 
 void printUsage() {
@@ -24,8 +25,9 @@ int main(int argc, char **argv) {
 
 	std::string sTargetPath(argv[1]);
     BinaryFile target(sTargetPath);
-    target.scan();
-	target.printResult();
+	VulnReport* pReport;
+	SCAN_RESULT sr = target.scan(&pReport);
+	std::cout << scanResultToString(sr) << ':' << pReport->toString();
 	return 0;
 
 	/*
