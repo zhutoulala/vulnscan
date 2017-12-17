@@ -4,21 +4,38 @@
 #include "vuln_report.h"
 #include <string>
 
-class BinaryFile {
+class IBinaryFile {
 
 private:
-    std::string sFilePath;
-	bool scanned;
+	std::string sFilePath;
 
 public:
-    BinaryFile(std::string& sFilePath);
+	IBinaryFile(std::string sFilePath){}
+    virtual ~IBinaryFile(){}
+public:
+	virtual SCAN_RESULT scan(VulnReport** ppReport) = 0;	
+};
+
+class BinaryFactory {
+public:
+	SCAN_RESULT GetBinary(std::string sFilePath, IBinaryFile** ppBinaryFile);
+};
+
+class WindowsBinary : public IBinaryFile {
+public:
+	WindowsBinary(std::string sFilePath);
 
 public:
-	SCAN_RESULT scan(VulnReport** pReport);
+	SCAN_RESULT scan(VulnReport** ppReport);
 
-    //llvm::MemoryBuffer* getCodeSection();
-private:
-	SCAN_RESULT scanEXE(VulnReport** pReport);
-	SCAN_RESULT scanELF(VulnReport** pReport);
-	
+};
+
+
+class LinuxBinary : public IBinaryFile {
+public:
+	LinuxBinary(std::string sFilePath);
+
+public:
+	SCAN_RESULT scan(VulnReport** ppReport);
+
 };

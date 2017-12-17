@@ -3,38 +3,29 @@
 #include <iostream>
 #include <assert.h>
 
-BinaryFile::BinaryFile(std::string& sFilePath) : 
-	scanned(false), sFilePath(sFilePath){
-	
-}
-
-SCAN_RESULT BinaryFile::scan(VulnReport** pReport) {
-	SCAN_RESULT sr;
-
+SCAN_RESULT BinaryFactory::GetBinary(std::string sFilePath, IBinaryFile** ppBinaryFile) {
 	FileTyper typer(sFilePath);
 	if (!typer.isBinary()) {
-		sr = SCAN_RESULT_NOT_BINARY;
+		return SCAN_RESULT_NOT_BINARY;
 	}
 	else if (typer.isEXE()) {
-		sr = scanEXE(pReport);
+		*ppBinaryFile = new WindowsBinary(sFilePath);
+		return SCAN_RESULT_SUCCESS;
 	}
 	else if (typer.isELF()) {
-		sr = scanELF(pReport);
+		*ppBinaryFile = new LinuxBinary(sFilePath);
 	}
 	else {
-		sr = SCAN_RESULT_NOT_SUPPORT;
+		return SCAN_RESULT_NOT_SUPPORT;
 	}
-	return sr;
 }
 
-SCAN_RESULT BinaryFile::scanEXE(VulnReport** pReport) {
-	assert(pReport == nullptr);
-	*pReport = new VulnReport();
 
-	return SCAN_RESULT_SUCCESS;
+WindowsBinary::WindowsBinary(std::string sFilePath) : IBinaryFile(sFilePath){
+
 }
 
-SCAN_RESULT BinaryFile::scanELF(VulnReport** pReport) {
+SCAN_RESULT WindowsBinary::scan(VulnReport** pReport) {
 	assert(pReport == nullptr);
 	*pReport = new VulnReport();
 

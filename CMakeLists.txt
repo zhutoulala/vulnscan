@@ -12,9 +12,57 @@ if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 endif()
 
+
+##########################################################################	
+# Download and unpack googletest at configure time
+#########################################################################
+configure_file(CMakeLists.gtest.txt googletest-download/CMakeLists.txt)
+execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
+execute_process(COMMAND "${CMAKE_COMMAND}" --build .
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
+
+# Prevent GoogleTest from overriding our compiler/linker options
+# when building with Visual Studio
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+# Add googletest directly to our build. This adds
+# the following targets: gtest, gtest_main, gmock
+# and gmock_main
+add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src"
+                 "${CMAKE_BINARY_DIR}/googletest-build")
+
+include_directories(
+    ${CMAKE_BINARY_DIR}/googletest-src/googletest/include
+)
+				 
+#########################################################################
+# Download and unpack capstone at configure time
+#########################################################################
+configure_file(CMakeLists.capstone.txt capstone-download/CMakeLists.txt)
+execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/capstone-download" )
+execute_process(COMMAND "${CMAKE_COMMAND}" --build .
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/capstone-download" )
+
+# Prevent capstone from overriding our compiler/linker options
+# when building with Visual Studio
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+# Add capstone directly to our build. This adds
+# the following targets: capstone
+add_subdirectory("${CMAKE_BINARY_DIR}/capstone-src"
+                 "${CMAKE_BINARY_DIR}/capstone-build")
+
+
+#########################################################################
+# Build main project				 
+#########################################################################				 
 include_directories(
     ${PROJECT_SOURCE_DIR}/src
     )
+	
+
 
 add_executable(
     ${PROJECT_NAME}
@@ -25,39 +73,25 @@ add_executable(
 	src/vulnscan.cpp
     )
 
-set(GOOGLETEST_ROOT external/googletest/googletest CACHE STRING "Google Test source root")
-
-include_directories(
-    ${PROJECT_SOURCE_DIR}/${GOOGLETEST_ROOT}
-    ${PROJECT_SOURCE_DIR}/${GOOGLETEST_ROOT}/include
-    )
-
-set(GOOGLETEST_SOURCES
-    ${PROJECT_SOURCE_DIR}/${GOOGLETEST_ROOT}/src/gtest-all.cc
-    ${PROJECT_SOURCE_DIR}/${GOOGLETEST_ROOT}/src/gtest_main.cc
-    )
-
-foreach(_source ${GOOGLETEST_SOURCES})
-    set_source_files_properties(${_source} PROPERTIES GENERATED 1)
-endforeach()
-
-add_library(googletest ${GOOGLETEST_SOURCES})
+target_link_libraries(
+    ${PROJECT_NAME}
+    capstone-static
+    )				 
 
 add_executable(
     unit_tests
 	src/binary_file.cpp
 	src/file_typer.cpp
+	src/vuln_report.cpp
+	src/vulnerability.cpp
     test/main.cpp
     test/test_binary_file.cpp
     test/test_file_typer.cpp
     )
 
-add_dependencies(unit_tests googletest)
-
 target_link_libraries(
     unit_tests
-    googletest
-	
+    gtest
     )
 
 include(CTest)
