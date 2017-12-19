@@ -12,8 +12,10 @@ private:
 public:
 	IBinaryFile(std::string sFilePath){}
     virtual ~IBinaryFile(){}
+
 public:
-	virtual SCAN_RESULT scan(VulnReport** ppReport) = 0;	
+	virtual SCAN_RESULT scan(VulnReport** ppReport) = 0;
+	virtual SCAN_RESULT getCodeSection(std::vector<uint8_t>& vCode) = 0;
 };
 
 class BinaryFactory {
@@ -27,6 +29,7 @@ public:
 
 public:
 	SCAN_RESULT scan(VulnReport** ppReport);
+	SCAN_RESULT getCodeSection(std::vector<uint8_t>& vCode);
 
 };
 
@@ -37,5 +40,5 @@ public:
 
 public:
 	SCAN_RESULT scan(VulnReport** ppReport);
-
+	SCAN_RESULT getCodeSection(std::vector<uint8_t>& vCode);
 };

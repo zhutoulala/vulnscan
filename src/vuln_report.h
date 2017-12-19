@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vulnerability.h"
+#include "disassembler.h"
 #include <string>
 #include <vector>
 #include <memory>
@@ -14,6 +15,6 @@ public:
 
 public:
 	bool isVulnerablityFound() { return spFoundVulnerablities->size() > 0; };
-
+	size_t SearchForCVE(Disassembler::InstructionSet* pInstructionSet);
 	std::string toString();
 };

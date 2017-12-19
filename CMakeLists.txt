@@ -54,7 +54,9 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 add_subdirectory("${CMAKE_BINARY_DIR}/capstone-src"
                  "${CMAKE_BINARY_DIR}/capstone-build")
 
-
+include_directories(
+    ${CMAKE_BINARY_DIR}/capstone-src/include
+)
 #########################################################################
 # Build main project				 
 #########################################################################				 
@@ -71,6 +73,7 @@ add_executable(
 	src/vuln_report.cpp
 	src/vulnerability.cpp
 	src/vulnscan.cpp
+	src/disassembler.cpp
     )
 
 target_link_libraries(
