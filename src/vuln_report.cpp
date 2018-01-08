@@ -17,3 +17,7 @@ std::string VulnReport::toString() {
 	}
 	return sReport;
 }
+
+size_t VulnReport::SearchForCVE(Disassembler::InstructionSet& instructionSet) {
+	return 0;
+}

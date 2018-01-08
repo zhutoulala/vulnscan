@@ -10,6 +10,7 @@
 #include "scan_results.h"
 #include "vuln_report.h"
 #include <iostream>
+#include <memory>
 
 void printUsage() {
 	std::cout << "vulnscan [path to file]\n";
@@ -24,9 +25,15 @@ int main(int argc, char **argv) {
 	}
 
 	std::string sTargetPath(argv[1]);
-    BinaryFile target(sTargetPath);
+	IBinaryFile *pBinaryFile = nullptr;
+	SCAN_RESULT sr = BinaryFactory::GetBinary(sTargetPath, &pBinaryFile);
+	if (SCAN_FAILED(sr) || (pBinaryFile == nullptr)) {
+		std::cout << "GetBinart failed: " << scanResultToString(sr) << std::endl;
+		return -1;
+	}
+	
 	VulnReport* pReport;
-	SCAN_RESULT sr = target.scan(&pReport);
+	sr = pBinaryFile->scan(&pReport);
 	std::cout << scanResultToString(sr) << ':' << pReport->toString();
 	return 0;
 

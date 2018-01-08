@@ -20,7 +20,7 @@ public:
 
 class BinaryFactory {
 public:
-	SCAN_RESULT GetBinary(std::string sFilePath, IBinaryFile** ppBinaryFile);
+	static SCAN_RESULT GetBinary(std::string sFilePath, IBinaryFile** ppBinaryFile);
 };
 
 class WindowsBinary : public IBinaryFile {

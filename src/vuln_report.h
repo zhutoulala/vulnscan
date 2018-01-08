@@ -15,6 +15,6 @@ public:
 
 public:
 	bool isVulnerablityFound() { return spFoundVulnerablities->size() > 0; };
-	size_t SearchForCVE(Disassembler::InstructionSet* pInstructionSet);
+	size_t SearchForCVE(Disassembler::InstructionSet& instructionSet);
 	std::string toString();
 };

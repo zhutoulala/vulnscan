@@ -17,9 +17,8 @@ SCAN_RESULT BinaryFactory::GetBinary(std::string sFilePath, IBinaryFile** ppBina
 	else if (typer.isELF()) {
 		*ppBinaryFile = new LinuxBinary(sFilePath);
 	}
-	else {
-		return SCAN_RESULT_NOT_SUPPORT;
-	}
+	
+	return SCAN_RESULT_NOT_SUPPORT;
 }
 
 
@@ -35,18 +34,33 @@ SCAN_RESULT WindowsBinary::scan(VulnReport** ppReport) {
 	if SCAN_FAILED(sr) {
 		return sr;
 	}
-	Disassembler::InstructionSet* pInstructionSet;
-	sr = Disassembler::Disassembly(vCode, &pInstructionSet);
+	Disassembler::InstructionSet instructionSet;
+	sr = Disassembler::Disassembly(vCode, instructionSet);
 	if SCAN_FAILED(sr) {
 		return sr;
 	}
 
 	*ppReport = new VulnReport();
-	(*ppReport)->SearchForCVE(pInstructionSet);
+	(*ppReport)->SearchForCVE(instructionSet);
 
 	return SCAN_RESULT_SUCCESS;
 }
 
 SCAN_RESULT WindowsBinary::getCodeSection(std::vector<uint8_t>& vCode) {
 	return SCAN_RESULT_SUCCESS;
+}
+
+LinuxBinary::LinuxBinary(std::string sFilePath) : IBinaryFile(sFilePath) {
+
+}
+
+
+SCAN_RESULT LinuxBinary::scan(VulnReport** ppReport) {
+	assert(ppReport == nullptr);
+
+	return SCAN_RESULT_NOT_SUPPORT;
+}
+
+SCAN_RESULT LinuxBinary::getCodeSection(std::vector<uint8_t>& vCode) {
+	return SCAN_RESULT_NOT_SUPPORT;
 }

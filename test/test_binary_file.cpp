@@ -4,9 +4,13 @@
 TEST(BinaryFile, printResult)
 {
 	std::string test("test");
-    BinaryFile bin(test);
+	IBinaryFile *pBinaryFile = nullptr;
+	SCAN_RESULT sr = BinaryFactory::GetBinary(test, &pBinaryFile);
+	ASSERT_EQ(sr, SCAN_RESULT_SUCCESS);
+
+	ASSERT_NE(pBinaryFile, nullptr);
 	VulnReport *pReport;
-	SCAN_RESULT sr = bin.scan(&pReport);
+	sr = pBinaryFile->scan(&pReport);
 	ASSERT_EQ(sr, SCAN_RESULT_SUCCESS);
     
 }

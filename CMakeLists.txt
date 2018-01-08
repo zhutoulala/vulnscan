@@ -87,14 +87,17 @@ add_executable(
 	src/file_typer.cpp
 	src/vuln_report.cpp
 	src/vulnerability.cpp
-    test/main.cpp
-    test/test_binary_file.cpp
-    test/test_file_typer.cpp
+	src/disassembler.cpp	
+	test/main.cpp	
+	test/test_binary_file.cpp
+	test/test_file_typer.cpp
+	test/test_disassembler.cpp
     )
 
 target_link_libraries(
-    unit_tests
-    gtest
+	unit_tests
+	gtest
+	capstone-static
     )
 
 include(CTest)
