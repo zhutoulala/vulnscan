@@ -45,9 +45,6 @@ execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
 execute_process(COMMAND "${CMAKE_COMMAND}" --build .
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/capstone-download" )
 
-# Prevent capstone from overriding our compiler/linker options
-# when building with Visual Studio
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
 # Add capstone directly to our build. This adds
 # the following targets: capstone
@@ -56,6 +53,24 @@ add_subdirectory("${CMAKE_BINARY_DIR}/capstone-src"
 
 include_directories(
     ${CMAKE_BINARY_DIR}/capstone-src/include
+)
+
+#########################################################################
+# Download and unpack pe-parse at configure time
+#########################################################################
+configure_file(CMakeLists.peparse.txt pe-parse-download/CMakeLists.txt)
+execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/pe-parse-download" )
+execute_process(COMMAND "${CMAKE_COMMAND}" --build .
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/pe-parse-download" )
+
+# Add pe-parse directly to our build. This adds
+# the following targets: pe-parse
+add_subdirectory("${CMAKE_BINARY_DIR}/pe-parse-src"
+                 "${CMAKE_BINARY_DIR}/pe-parse-build")
+
+include_directories(
+    ${CMAKE_BINARY_DIR}/pe-parse-src/pe-parser-library/include
 )
 #########################################################################
 # Build main project				 
@@ -69,7 +84,8 @@ include_directories(
 add_executable(
     ${PROJECT_NAME}
 	src/file_typer.cpp
-	src/binary_file.cpp
+	src/windows_binary.cpp
+	src/linux_binary.cpp
 	src/vuln_report.cpp
 	src/vulnerability.cpp
 	src/vulnscan.cpp
@@ -83,13 +99,14 @@ target_link_libraries(
 
 add_executable(
     unit_tests
-	src/binary_file.cpp
+	src/windows_binary.cpp
+	src/linux_binary.cpp
 	src/file_typer.cpp
 	src/vuln_report.cpp
 	src/vulnerability.cpp
 	src/disassembler.cpp	
 	test/main.cpp	
-	test/test_binary_file.cpp
+	test/test_windows_binary.cpp
 	test/test_file_typer.cpp
 	test/test_disassembler.cpp
     )

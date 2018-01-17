@@ -1,25 +1,15 @@
 #include "binary_file.h"
 #include "file_typer.h"
 #include "disassembler.h"
+#include "parser-library/parse.h"
+
 #include <iostream>
+#include <vector>
+#include <memory>
+#include <fstream>
+#include <future>
 #include <assert.h>
 
-
-SCAN_RESULT BinaryFactory::GetBinary(std::string sFilePath, IBinaryFile** ppBinaryFile) {
-	FileTyper typer(sFilePath);
-	if (!typer.isBinary()) {
-		return SCAN_RESULT_NOT_BINARY;
-	}
-	else if (typer.isEXE()) {
-		*ppBinaryFile = new WindowsBinary(sFilePath);
-		return SCAN_RESULT_SUCCESS;
-	}
-	else if (typer.isELF()) {
-		*ppBinaryFile = new LinuxBinary(sFilePath);
-	}
-	
-	return SCAN_RESULT_NOT_SUPPORT;
-}
 
 
 WindowsBinary::WindowsBinary(std::string sFilePath) : IBinaryFile(sFilePath){
@@ -50,17 +40,21 @@ SCAN_RESULT WindowsBinary::getCodeSection(std::vector<uint8_t>& vCode) {
 	return SCAN_RESULT_SUCCESS;
 }
 
-LinuxBinary::LinuxBinary(std::string sFilePath) : IBinaryFile(sFilePath) {
-
+SCAN_RESULT WindowsBinary::ReadEntireFile()
+{
+	std::ifstream ifile(sFilePath, std::ios::binary | std::ios::in | std::ios::ate);
+	if (ifile.is_open())
+	{
+		auto size = ifile.tellg();
+		ifile.seekg(0, std::ios::beg);
+		ifile.read(vBuffer.data, size);
+		ifile.close();
+		return SCAN_RESULT_SUCCESS;
+	}
+	return SCAN_RESULT_NOT_FOUND;
 }
 
-
-SCAN_RESULT LinuxBinary::scan(VulnReport** ppReport) {
-	assert(ppReport == nullptr);
-
-	return SCAN_RESULT_NOT_SUPPORT;
-}
-
-SCAN_RESULT LinuxBinary::getCodeSection(std::vector<uint8_t>& vCode) {
-	return SCAN_RESULT_NOT_SUPPORT;
+SCAN_RESULT WindowsBinary::ParsePE()
+{
+	
 }
