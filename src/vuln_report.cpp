@@ -1,17 +1,17 @@
 #include "vuln_report.h"
+#include <iostream>
 
 VulnReport::VulnReport() {
-	spFoundVulnerablities = std::unique_ptr<std::vector<Vulnerablity>>(new std::vector<Vulnerablity>());
+	vVulnerablities = std::vector<std::shared_ptr<Vulnerablity>>();
 }
 
 std::string VulnReport::toString() {
-	if (spFoundVulnerablities->size() == 0) {
+	if (vVulnerablities.size() == 0) {
 		return "No vulnerability found";
 	}
 	
 	std::string sReport = "Found vulnerability: \n\n";
-	for (std::vector<Vulnerablity>::iterator it = spFoundVulnerablities->begin();
-		it != spFoundVulnerablities->end(); it ++) {
+	for (auto it : vVulnerablities) {
 		sReport += it->getCVE();
 		sReport += '\n';
 	}
@@ -19,5 +19,9 @@ std::string VulnReport::toString() {
 }
 
 size_t VulnReport::SearchForCVE(Disassembler::InstructionSet& instructionSet) {
+	for (size_t i = 0; i < instructionSet.count; i++) {
+		printf("0x%" PRIx64 ":\t%s\t\t%s\n", instructionSet.pInsn[i].address, instructionSet.pInsn[i].mnemonic,
+			                  instructionSet.pInsn[i].op_str);
+	}
 	return 0;
 }

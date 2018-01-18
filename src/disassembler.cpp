@@ -3,7 +3,7 @@
 
 namespace Disassembler {
 
-SCAN_RESULT Disassembly(const std::vector<uint8_t>& vCode, InstructionSet instructions) {
+SCAN_RESULT Disassembly(const std::vector<uint8_t>& vCode, InstructionSet& instructions) {
 	csh handle;
 
 	if (cs_open(CS_ARCH_X86, CS_MODE_64, &handle) != CS_ERR_OK) {

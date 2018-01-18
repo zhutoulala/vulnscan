@@ -34,6 +34,8 @@ int main(int argc, char **argv) {
 	
 	VulnReport* pReport;
 	sr = pBinaryFile->scan(&pReport);
-	std::cout << scanResultToString(sr) << ':' << pReport->toString();
+	std::cout << scanResultToString(sr) << std::endl;
+	if SCAN_SUCCEED(sr)
+		std::cout << pReport->toString();
 	return 0;
 }

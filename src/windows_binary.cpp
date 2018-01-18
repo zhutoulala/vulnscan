@@ -16,9 +16,7 @@ WindowsBinary::WindowsBinary(std::string sFilePath) : IBinaryFile(sFilePath){
 
 }
 
-SCAN_RESULT WindowsBinary::scan(VulnReport** ppReport) {
-	assert(ppReport == nullptr);
-	
+SCAN_RESULT WindowsBinary::scan(VulnReport** ppReport) {	
 	std::vector<uint8_t> vCode;
 	SCAN_RESULT sr = getCodeSection(vCode);
 	if SCAN_FAILED(sr) {
@@ -43,7 +41,7 @@ SCAN_RESULT WindowsBinary::getCodeSection(std::vector<uint8_t>& vCode) {
 
 	peparse::VA entryPoint;
 	if (peparse::GetEntryPoint(pParsedPE, entryPoint)) {
-		// read the first 10000 bytes for now
+		// read the first 1000 bytes for now
 		for (size_t i = 0; i < 10000; i++) {
 			uint8_t b;
 			peparse::ReadByteAtVA(pParsedPE, i + entryPoint, b);

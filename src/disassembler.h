@@ -14,5 +14,5 @@ typedef struct _InstructionSet {
 
 //typedef cs_insn InstructionSet;
 	
-SCAN_RESULT Disassembly(const std::vector<uint8_t>& vCode, InstructionSet instructions);
+SCAN_RESULT Disassembly(const std::vector<uint8_t>& vCode, InstructionSet& instructions);
 };

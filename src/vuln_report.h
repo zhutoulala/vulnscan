@@ -8,13 +8,13 @@
 
 class VulnReport {
 private:
-	std::unique_ptr<std::vector<Vulnerablity>> spFoundVulnerablities;
+	std::vector<std::shared_ptr<Vulnerablity>> vVulnerablities;
 
 public:
 	VulnReport();
 
 public:
-	bool isVulnerablityFound() { return spFoundVulnerablities->size() > 0; };
+	bool isVulnerablityFound() { return vVulnerablities.size() > 0; };
 	size_t SearchForCVE(Disassembler::InstructionSet& instructionSet);
 	std::string toString();
 };

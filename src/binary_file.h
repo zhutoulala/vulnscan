@@ -11,7 +11,7 @@ protected:
 	std::string sFilePath;
 
 public:
-	IBinaryFile(std::string sFilePath){}
+	IBinaryFile(std::string sFilePath):sFilePath(sFilePath){}
     virtual ~IBinaryFile(){}
 
 public:

@@ -95,6 +95,7 @@ add_executable(
 target_link_libraries(
     ${PROJECT_NAME}
     capstone-static
+	pe-parser-library
     )				 
 
 add_executable(
@@ -115,6 +116,7 @@ target_link_libraries(
 	unit_tests
 	gtest
 	capstone-static
+	pe-parser-library
     )
 
 include(CTest)
