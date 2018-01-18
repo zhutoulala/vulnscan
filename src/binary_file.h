@@ -1,9 +1,9 @@
 #pragma once
-
+#include "file_typer.h"
 #include "scan_results.h"
 #include "vuln_report.h"
 #include <string>
-#include <Windows.h>
+#include <assert.h>
 
 class IBinaryFile {
 
@@ -17,6 +17,26 @@ public:
 public:
 	virtual SCAN_RESULT scan(VulnReport** ppReport) = 0;
 	virtual SCAN_RESULT getCodeSection(std::vector<uint8_t>& vCode) = 0;
+};
+
+class WindowsBinary : public IBinaryFile {
+
+public:
+	WindowsBinary(std::string sFilePath);
+
+public:
+	SCAN_RESULT scan(VulnReport** ppReport);
+	SCAN_RESULT getCodeSection(std::vector<uint8_t>& vCode);
+};
+
+
+class LinuxBinary : public IBinaryFile {
+public:
+	LinuxBinary(std::string sFilePath);
+
+public:
+	SCAN_RESULT scan(VulnReport** ppReport);
+	SCAN_RESULT getCodeSection(std::vector<uint8_t>& vCode);
 };
 
 class BinaryFactory {
@@ -38,29 +58,3 @@ public:
 	}
 };
 
-class WindowsBinary : public IBinaryFile {
-
-public:
-	WindowsBinary(std::string sFilePath);
-
-public:
-	SCAN_RESULT scan(VulnReport** ppReport);
-	SCAN_RESULT getCodeSection(std::vector<uint8_t>& vCode);
-
-private:
-	SCAN_RESULT ReadEntireFile();
-	SCAN_RESULT ParsePE();
-
-private:
-	std::vector<uint8_t> vBuffer;
-};
-
-
-class LinuxBinary : public IBinaryFile {
-public:
-	LinuxBinary(std::string sFilePath);
-
-public:
-	SCAN_RESULT scan(VulnReport** ppReport);
-	SCAN_RESULT getCodeSection(std::vector<uint8_t>& vCode);
-};

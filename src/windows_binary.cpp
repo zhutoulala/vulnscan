@@ -8,7 +8,7 @@
 #include <memory>
 #include <fstream>
 #include <future>
-#include <assert.h>
+
 
 
 
@@ -37,24 +37,18 @@ SCAN_RESULT WindowsBinary::scan(VulnReport** ppReport) {
 }
 
 SCAN_RESULT WindowsBinary::getCodeSection(std::vector<uint8_t>& vCode) {
-	return SCAN_RESULT_SUCCESS;
-}
+	peparse::parsed_pe *pParsedPE = peparse::ParsePEFromFile(sFilePath.c_str());
+	if (pParsedPE == nullptr)
+		return SCAN_RESULT_PE_PARSE_ERROR;
 
-SCAN_RESULT WindowsBinary::ReadEntireFile()
-{
-	std::ifstream ifile(sFilePath, std::ios::binary | std::ios::in | std::ios::ate);
-	if (ifile.is_open())
-	{
-		auto size = ifile.tellg();
-		ifile.seekg(0, std::ios::beg);
-		ifile.read(vBuffer.data, size);
-		ifile.close();
-		return SCAN_RESULT_SUCCESS;
+	peparse::VA entryPoint;
+	if (peparse::GetEntryPoint(pParsedPE, entryPoint)) {
+		// read the first 10000 bytes for now
+		for (size_t i = 0; i < 10000; i++) {
+			uint8_t b;
+			peparse::ReadByteAtVA(pParsedPE, i + entryPoint, b);
+			vCode.push_back(b);
+		}
 	}
-	return SCAN_RESULT_NOT_FOUND;
-}
-
-SCAN_RESULT WindowsBinary::ParsePE()
-{
-	
+	return SCAN_RESULT_SUCCESS;
 }

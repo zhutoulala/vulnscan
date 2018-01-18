@@ -36,19 +36,4 @@ int main(int argc, char **argv) {
 	sr = pBinaryFile->scan(&pReport);
 	std::cout << scanResultToString(sr) << ':' << pReport->toString();
 	return 0;
-
-	/*
-    std::string inputFile = argv[1];
-    clang::CompilerInstance compInst;
-
-    clang::EmitLLVMOnlyAction codegenAction;
-    codegenAction.BeginSourceFile(compInst,
-            FrontendInputFile(inputFile, IK_CXX, false));
-    codegenAction.Execute();
-    codegenAction.EndSourceFile();
-
-    llvm::Module* module = codegenAction.takeModule();
-	*/
-
-    //return 0;
 }
