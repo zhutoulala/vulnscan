@@ -1,6 +1,8 @@
 # vulnscan
-A static binary scanner. Could be used to examine if target binary contains any known vunerability.
+A static binary scanner. Could be used to examine if target binary contains any known vulnerability.
+
 Please note this project is still under development.
+
 ## How to build on Linux
 ```
 mkdir build
