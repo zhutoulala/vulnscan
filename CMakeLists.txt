@@ -16,7 +16,7 @@ endif()
 ##########################################################################	
 # Download and unpack googletest at configure time
 #########################################################################
-configure_file(CMakeLists.gtest.txt googletest-download/CMakeLists.txt)
+configure_file(dependencies/CMakeLists.gtest.txt googletest-download/CMakeLists.txt)
 execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/googletest-download" )
 execute_process(COMMAND "${CMAKE_COMMAND}" --build .
@@ -39,7 +39,7 @@ include_directories(
 #########################################################################
 # Download and unpack capstone at configure time
 #########################################################################
-configure_file(CMakeLists.capstone.txt capstone-download/CMakeLists.txt)
+configure_file(dependencies/CMakeLists.capstone.txt capstone-download/CMakeLists.txt)
 execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/capstone-download" )
 execute_process(COMMAND "${CMAKE_COMMAND}" --build .
@@ -58,7 +58,7 @@ include_directories(
 #########################################################################
 # Download and unpack pe-parse at configure time
 #########################################################################
-configure_file(CMakeLists.peparse.txt pe-parse-download/CMakeLists.txt)
+configure_file(dependencies/CMakeLists.peparse.txt pe-parse-download/CMakeLists.txt)
 execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/pe-parse-download" )
 execute_process(COMMAND "${CMAKE_COMMAND}" --build .
@@ -72,6 +72,19 @@ add_subdirectory("${CMAKE_BINARY_DIR}/pe-parse-src"
 include_directories(
     ${CMAKE_BINARY_DIR}/pe-parse-src/pe-parser-library/include
 )
+
+#########################################################################
+# other dependencies
+#########################################################################
+add_subdirectory("${PROJECT_SOURCE_DIR}/dependencies/strings2/strings"
+                 "${PROJECT_SOURCE_DIR}/dependencies/strings2")
+
+include_directories(
+    ${PROJECT_SOURCE_DIR}/dependencies/strings2/strings
+)
+
+
+
 #########################################################################
 # Build main project				 
 #########################################################################				 
@@ -96,6 +109,7 @@ target_link_libraries(
     ${PROJECT_NAME}
     capstone-static
 	pe-parser-library
+	strings
     )				 
 
 add_executable(
@@ -117,6 +131,7 @@ target_link_libraries(
 	gtest
 	capstone-static
 	pe-parser-library
+	strings
     )
 
 include(CTest)
