@@ -367,9 +367,8 @@ bool string_parser::processContents( unsigned char* filecontents, long bufferSiz
 					else
 						printer->addStrings((char*)outputString, "\n");
 				}
-
-
-				
+				std::string s((char*)outputString);
+				vBuffer.push_back(s);
 			}
 
 			// Advance the offset

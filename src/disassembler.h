@@ -10,6 +10,8 @@ namespace Disassembler {
 typedef struct _InstructionSet {
 	cs_insn *pInsn;
 	size_t count;
+
+	~_InstructionSet() { cs_free(pInsn, count); }
 } InstructionSet;
 
 //typedef cs_insn InstructionSet;

@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 	IBinaryFile *pBinaryFile = nullptr;
 	SCAN_RESULT sr = BinaryFactory::GetBinary(sTargetPath, &pBinaryFile);
 	if (SCAN_FAILED(sr) || (pBinaryFile == nullptr)) {
-		std::cout << "GetBinart failed: " << scanResultToString(sr) << std::endl;
+		std::cout << "GetBinary failed: " << scanResultToString(sr) << std::endl;
 		return -1;
 	}
 	
@@ -37,5 +37,7 @@ int main(int argc, char **argv) {
 	std::cout << scanResultToString(sr) << std::endl;
 	if SCAN_SUCCEED(sr)
 		std::cout << pReport->toString();
+	//std::string sSearch("test");
+	//sr = pBinaryFile->searchString(sSearch);
 	return 0;
 }

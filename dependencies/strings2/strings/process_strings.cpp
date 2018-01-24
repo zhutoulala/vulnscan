@@ -8,7 +8,7 @@ bool IsWin64(HANDLE process)
 	{
 		return retVal;
 	}
-	PrintLastError(L"IsWow64Process");
+	//PrintLastError(L"IsWow64Process");
 	return false;
 }
 
@@ -42,7 +42,7 @@ bool process_strings::dump_system()
 	return false;
 }
 
-bool process_strings::dump_process(DWORD pid)
+/*bool process_strings::dump_process(DWORD pid)
 {
 	// Open the process
 	HANDLE ph = OpenProcess( PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, false, pid);
@@ -81,7 +81,7 @@ bool process_strings::dump_process(DWORD pid)
 		fprintf(stderr,"Failed open process 0x%x (%i). ", pid, pid);
 		PrintLastError(L"dump_process");
 	}
-}
+}*/
 
 process_strings::process_strings(string_parser* parser)
 {
@@ -129,7 +129,7 @@ bool process_strings::processAllHeaps(HANDLE ph, char* process_name)
 					parser->parse_block( buffer, numRead, process_name);
 				}else if( !result ){
 					fprintf(stderr,"Failed to read from address 0x%016llX. ", mbi.BaseAddress);
-					PrintLastError(L"ReadProcessMemory");
+					//PrintLastError(L"ReadProcessMemory");
 				}
 
 				// Cleanup
@@ -143,7 +143,7 @@ bool process_strings::processAllHeaps(HANDLE ph, char* process_name)
 	return true;
 }
 
-void process_strings::generateModuleList(HANDLE hSnapshot)
+/*void process_strings::generateModuleList(HANDLE hSnapshot)
 {
 	MODULEENTRY32 tmpModule;
 	tmpModule.dwSize = sizeof(MODULEENTRY32);
@@ -160,7 +160,7 @@ void process_strings::generateModuleList(HANDLE hSnapshot)
 			tmpModule.dwSize = sizeof(MODULEENTRY32);
 		}
 	}
-}
+}*/
 
 process_strings::~process_strings(void)
 {

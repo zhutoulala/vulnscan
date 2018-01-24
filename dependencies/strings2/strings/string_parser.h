@@ -63,7 +63,7 @@ class string_parser
 	
 	STRING_OPTIONS options;
 	print_buffer* printer;
-	
+	std::vector<std::string> vBuffer;
 
 	int extractImmediate( char* immediate, int immediateSize, STRING_TYPE &stringType, unsigned char* outputString );
 	int extractString( unsigned char*  buffer, long bufferSize, long offset, unsigned char* outputString, int outputStringSize, int &outputStringLength, EXTRACT_TYPE &extractType, STRING_TYPE & stringType);
@@ -72,5 +72,6 @@ public:
 	string_parser( STRING_OPTIONS options );
 	bool parse_block( unsigned char* buffer, unsigned int buffer_length, LPCSTR datasource );
 	bool parse_stream( FILE* fh, LPCSTR datasource );
+	std::vector<std::string> getBuffer() { return vBuffer; };
 	~string_parser(void);
 };

@@ -76,8 +76,8 @@ include_directories(
 #########################################################################
 # other dependencies
 #########################################################################
-add_subdirectory("${PROJECT_SOURCE_DIR}/dependencies/strings2/strings"
-                 "${PROJECT_SOURCE_DIR}/dependencies/strings2")
+
+add_subdirectory(dependencies/strings2)
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/dependencies/strings2/strings
@@ -103,13 +103,14 @@ add_executable(
 	src/vulnerability.cpp
 	src/vulnscan.cpp
 	src/disassembler.cpp
+	src/signature.cpp
     )
 
 target_link_libraries(
     ${PROJECT_NAME}
     capstone-static
 	pe-parser-library
-	strings
+	strings2
     )				 
 
 add_executable(
@@ -119,7 +120,8 @@ add_executable(
 	src/file_typer.cpp
 	src/vuln_report.cpp
 	src/vulnerability.cpp
-	src/disassembler.cpp	
+	src/disassembler.cpp
+	src/signature.cpp	
 	test/main.cpp	
 	test/test_windows_binary.cpp
 	test/test_file_typer.cpp
@@ -131,7 +133,7 @@ target_link_libraries(
 	gtest
 	capstone-static
 	pe-parser-library
-	strings
+	strings2
     )
 
 include(CTest)

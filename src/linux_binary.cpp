@@ -14,3 +14,7 @@ SCAN_RESULT LinuxBinary::scan(VulnReport** ppReport) {
 SCAN_RESULT LinuxBinary::getCodeSection(std::vector<uint8_t>& vCode) {
 	return SCAN_RESULT_NOT_SUPPORT;
 }
+
+SCAN_RESULT LinuxBinary::getStrings(std::vector<std::string>& vStrings) {
+	return SCAN_RESULT_NOT_SUPPORT;
+}

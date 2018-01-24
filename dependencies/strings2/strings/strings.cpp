@@ -60,14 +60,14 @@ bool isElevated(HANDLE h_Process)
     return false;
 }
 
-void processFolder( char* dir_name, WCHAR* filter, bool recursively, string_parser* parser )
+/*void processFolder( char* dir_name, WCHAR* filter, bool recursively, string_parser* parser )
 {
 	DIR *dir;
 	struct dirent *ent;
 	dir = opendir (dir_name);
 	if (dir != NULL)
 	{
-		/* print all the files and directories within directory */
+		// print all the files and directories within directory
 		while ((ent = readdir (dir)) != NULL) {
 			// Convert the path to wchar format
 			wchar_t* result = new wchar_t[ent->d_namlen + 1];
@@ -127,7 +127,7 @@ void processFolder( char* dir_name, WCHAR* filter, bool recursively, string_pars
 	}else{
 		fprintf(stderr, "Unable to open directory %s: %s.\n", dir_name, strerror(errno));
 	}
-}
+}*/
 
 
 bool getMaximumPrivileges(HANDLE h_Process)
