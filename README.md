@@ -1,8 +1,9 @@
 # vulnscan
 It scans binary files to find if they contain known vulnerabilities that come from popular open source libraries.
 
-Currently supported binary compile language: c++
-Current supported binary compiler: visual studio, gcc, clang
+Currently supported binary compile language: `c++`
+
+Currently supported binary compiler: `visual studio, gcc, clang`
 
 ## How to build on Linux
 ```
