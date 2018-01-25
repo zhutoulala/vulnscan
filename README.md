@@ -1,7 +1,8 @@
 # vulnscan
-A static binary scanner. Could be used to examine if target binary contains any known vulnerability.
+It scans binary files to find if they contain known vulnerabilities that come from popular open source libraries.
 
-Please note this project is still under development.
+Currently supported binary compile language: c++
+Current supported binary compiler: visual studio, gcc, clang
 
 ## How to build on Linux
 ```
@@ -20,6 +21,7 @@ cmake ..
 Then build the solution vulnscan.sln
 
 ## How to run this tool
+copy data/vulnscan.sigs into the same folder as vulnscan, then run below command 
 ```
-vulnscan [path to target file]
+vulnscan [path to target binary file]
 ```

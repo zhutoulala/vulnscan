@@ -6,5 +6,7 @@ ASM:
     
 CVE-2017-1000100
 STRING:
++ TFTP: Unknown transfer ID
 + Disk full or allocation exceeded
++ tftp_rx: giving up waiting for block
 - TFTP file name too long
