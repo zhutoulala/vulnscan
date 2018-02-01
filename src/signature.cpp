@@ -2,7 +2,7 @@
 #include "signature.h" 
 #include <fstream>
 #include <sstream>
-
+#include <iterator>
 
 bool Signature::stringMatch(const std::vector<std::string>& vLookupStrings) {
 	size_t iPositiveCount = 0;
@@ -22,7 +22,9 @@ bool Signature::stringMatch(const std::vector<std::string>& vLookupStrings) {
 }
 
 bool Signature::asmCodeMatch(const Disassembler::InstructionSet& instructionSet) {
-	size_t iPositiveCount = 0;
+	// TODO - add symbols
+	return false;
+	/*size_t iPositiveCount = 0;
 	size_t iNegativeCount = 0;
 	for (size_t i = 0; i < instructionSet.count; i++) {
 		for (auto eachPositive : vPostiveASM) {
@@ -39,16 +41,22 @@ bool Signature::asmCodeMatch(const Disassembler::InstructionSet& instructionSet)
 			instructionSet.pInsn[i].op_str;
 	}
 	
-	return ((iPositiveCount == vPostiveStrings.size()) && (iNegativeCount == 0));
+	return ((iPositiveCount == vPostiveStrings.size()) && (iNegativeCount == 0));*/
 }
 
 bool SignatureLoader::load(std::string sSigsFilePath) {
 	std::ifstream in(sSigsFilePath);
 
-	if (!in) {
-		return false;
-	}
+	if (in) {
+		loadSigs(in);
+		in.close();
+		return true;
+	}	
+	return true;
+}
 
+void SignatureLoader::loadSigs(std::istream & in)
+{
 	std::string sLine;
 	while (std::getline(in, sLine)) {
 		if (sLine.compare(0, 3, "CVE-")) {
@@ -73,8 +81,16 @@ bool SignatureLoader::load(std::string sSigsFilePath) {
 					while (std::getline(in, sLine)) {
 						if (sLine.empty()) break;
 						else if (sLine.at(0) == '+') {
+							std::istringstream iss(sLine.substr(2));
+							std::vector<std::string> vSplits(std::istream_iterator<std::string>{iss},
+								std::istream_iterator<std::string>());
+							spSignature->addPostiveASM(vSplits);
 						}
 						else if (sLine.at(0) == '-') {
+							std::istringstream iss(sLine.substr(2));
+							std::vector<std::string> vSplits(std::istream_iterator<std::string>{iss},
+								std::istream_iterator<std::string>());
+							spSignature->addNegativeASM(vSplits);
 						}
 						else
 						{
@@ -84,10 +100,7 @@ bool SignatureLoader::load(std::string sSigsFilePath) {
 					}
 				}
 			}
-			
+
 		}
 	}
-
-	in.close();
-	return true;
 }

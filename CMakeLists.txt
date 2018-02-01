@@ -126,6 +126,7 @@ add_executable(
 	test/test_windows_binary.cpp
 	test/test_file_typer.cpp
 	test/test_disassembler.cpp
+	test/test_signature.cpp
     )
 
 target_link_libraries(

@@ -19,6 +19,6 @@ TEST(Disassembler, Disassembly)
 	Disassembler::InstructionSet instructions;
 	SCAN_RESULT sr = Disassembler::Disassembly(vCode, instructions);
 	ASSERT_EQ(sr, SCAN_RESULT_SUCCESS);
-	ASSERT_EQ(instructions.count, 8);
+	ASSERT_EQ(instructions.count, 6);
 
 }

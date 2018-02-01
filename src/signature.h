@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include "gtest/gtest_prod.h"
 #include "disassembler.h"
 
 class Signature {
@@ -17,12 +18,12 @@ public:
 		vNegativeStrings.push_back(sNegativeString);
 	}
 
-	inline void addPostiveASM(std::string& sPostiveASM) {
-		vPostiveASM.push_back(sPostiveASM);
+	inline void addPostiveASM(std::vector<std::string>& vASM) {
+		vPostiveASM.push_back(vASM);
 	}
 
-	inline void addNegativeASM(std::string& vNegativeASM) {
-		vNegativeStrings.push_back(vNegativeASM);
+	inline void addNegativeASM(std::vector<std::string>& vASM) {
+		vNegativeASM.push_back(vASM);
 	}
 
 	inline std::string getCVE() { return sCVE; }
@@ -35,8 +36,8 @@ private:
 	std::string sCVE;
 	std::vector<std::string> vPostiveStrings;
 	std::vector<std::string> vNegativeStrings;
-	std::vector<std::string> vPostiveASM;
-	std::vector<std::string> vNegativeASM;
+	std::vector<std::vector<std::string>> vPostiveASM;
+	std::vector<std::vector<std::string>> vNegativeASM;
 };
 
 class SignatureLoader {
@@ -52,6 +53,10 @@ public:
 	inline Signature* getSignature(size_t index) {
 		return vspSignatures.at(index).get();
 	};
+
+private:
+	FRIEND_TEST(SignatureLoader, loadSigs);
+	void loadSigs(std::istream& in);
 
 private:
 	std::vector<std::shared_ptr<Signature>> vspSignatures;
