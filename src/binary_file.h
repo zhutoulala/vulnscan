@@ -32,7 +32,7 @@ public:
 	SCAN_RESULT getStrings(std::vector<std::string>& vStrings);
 
 private:
-	static int WindowsBinary::locateCodeSection(void *N,
+	static int locateCodeSection(void *N,
 		peparse::VA secBase,
 		std::string &secName,
 		peparse::image_section_header s,

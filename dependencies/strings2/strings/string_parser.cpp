@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+//#include "StdAfx.h"
 #include "string_parser.h"
 
 int string_parser::extractImmediate( char* immediate, int immediateSize, STRING_TYPE &stringType, unsigned char* outputString )
@@ -84,7 +84,7 @@ int string_parser::extractString( unsigned char* buffer, long bufferSize, long o
 	int size;
 
 
-	unsigned _int16 value = *((unsigned _int16*) (buffer+offset));
+	uint16_t value = *((uint16_t*) (buffer+offset));
 	// Switch on the first two bytes
 	switch( value )
 	{
@@ -284,7 +284,7 @@ int string_parser::extractString( unsigned char* buffer, long bufferSize, long o
 }
 
 
-bool string_parser::processContents( unsigned char* filecontents, long bufferSize, LPCSTR filename )
+bool string_parser::processContents( unsigned char* filecontents, long bufferSize, const char* filename )
 {
 	// Process the contents of the specified file, and build the list of strings
 	unsigned char* outputString = new unsigned char[MAX_STRING_SIZE+1];
@@ -358,10 +358,10 @@ bool string_parser::processContents( unsigned char* filecontents, long bufferSiz
 
 					if( options.printType && options.printFile )
 					{
-						printer->addStrings((char*)filename, ",", (extractType == EXTRACT_RAW ? (stringType == TYPE_UNICODE ? "UNICODE: " : (stringType == TYPE_ASCII ? "ASCII: " : "UNDETERMINED: ")) : "ASM: "), (char*)outputString, "\n");
+						printer->addStrings((char*)filename, ",", (char*)(extractType == EXTRACT_RAW ? (stringType == TYPE_UNICODE ? "UNICODE: " : (stringType == TYPE_ASCII ? "ASCII: " : "UNDETERMINED: ")) : "ASM: "), (char*)outputString, "\n");
 					}
 					else if( options.printType )
-						printer->addStrings((extractType == EXTRACT_RAW ? (stringType == TYPE_UNICODE ? "UNICODE: " : (stringType == TYPE_ASCII ? "ASCII: " : "UNDETERMINED: ")) : "ASM: "), (char*)outputString, "\n");
+						printer->addStrings((char*)(extractType == EXTRACT_RAW ? (stringType == TYPE_UNICODE ? "UNICODE: " : (stringType == TYPE_ASCII ? "ASCII: " : "UNDETERMINED: ")) : "ASM: "), (char*)outputString, "\n");
 					else if( options.printFile )
 						printer->addStrings((char*)filename, ": ", (char*)outputString, "\n");
 					else
@@ -384,7 +384,7 @@ bool string_parser::processContents( unsigned char* filecontents, long bufferSiz
 }
 
 
-bool string_parser::parse_block(unsigned char* buffer, unsigned int buffer_length, LPCSTR datasource)
+bool string_parser::parse_block(unsigned char* buffer, unsigned int buffer_length, const char* datasource)
 {
 	if( buffer != NULL && buffer_length > 0)
 	{
@@ -400,7 +400,7 @@ string_parser::string_parser(STRING_OPTIONS options)
 	this->options = options;
 }
 
-bool string_parser::parse_stream(FILE* fh, LPCSTR datasource)
+bool string_parser::parse_stream(FILE* fh, const char* datasource)
 {
 	if( fh != NULL )
 	{

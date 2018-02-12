@@ -1,9 +1,9 @@
 #pragma once
-#include "windows.h"
+//#include "windows.h"
 #include "module.h"
-#include <tlhelp32.h>
+//#include <tlhelp32.h>
 #include "string_parser.h"
-#include <Psapi.h>
+//#include <Psapi.h>
 #include "basics.h"
 #pragma comment(lib, "Psapi")
 

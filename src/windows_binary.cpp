@@ -98,8 +98,8 @@ SCAN_RESULT WindowsBinary::getStrings(std::vector<std::string>& vStrings) {
 	options.minCharacters = 4;
 
 	string_parser* parser = new string_parser(options);
-	FILE *pFile;
-	if (fopen_s(&pFile, sFilePath.c_str(), "rb") != 0 || !pFile) {
+	FILE *pFile = fopen(sFilePath.c_str(), "rb");
+	if (!pFile) {
 		perror("Failed to read file\n");
 		return SCAN_RESULT_NOT_FOUND;
 	}

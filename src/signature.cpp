@@ -1,4 +1,3 @@
-#pragma once
 #include "signature.h" 
 #include <fstream>
 #include <sstream>
@@ -66,10 +65,12 @@ void SignatureLoader::loadSigs(std::istream & in)
 				while (std::getline(in, sLine)) {
 					if (sLine.empty()) break;
 					else if (sLine.at(0) == '+') {
-						spSignature->addPostiveString(sLine.substr(2));
+						std::string strSig = sLine.substr(2);
+						spSignature->addPostiveString(strSig);
 					}
 					else if (sLine.at(0) == '-') {
-						spSignature->addNegativeString(sLine.substr(2));
+						std::string strSig = sLine.substr(2);
+						spSignature->addNegativeString(strSig);
 					}
 					else
 					{

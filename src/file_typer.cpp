@@ -6,8 +6,8 @@ FileTyper::FileTyper(std::string& sFilePath) : sFilePath(sFilePath), type(TYPE::
 }
 
 void FileTyper::typing() {
-	FILE *pFile;
-	if (fopen_s(&pFile, sFilePath.c_str(), "rb") != 0 || !pFile) {
+	FILE *pFile = fopen(sFilePath.c_str(), "rb");
+	if (!pFile) {
 		perror("Failed to read file\n");
 		return;
 	}

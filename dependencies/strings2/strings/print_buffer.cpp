@@ -1,4 +1,3 @@
-#include "StdAfx.h"
 #include "print_buffer.h"
 
 print_buffer::print_buffer(int buffer_size)
