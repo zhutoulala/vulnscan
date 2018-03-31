@@ -104,6 +104,8 @@ add_executable(
 	src/vulnscan.cpp
 	src/disassembler.cpp
 	src/signature.cpp
+	src/windows_symbols.cpp
+	src/scanner.cpp
     )
 
 target_link_libraries(

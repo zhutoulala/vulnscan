@@ -7,13 +7,13 @@
 //============================================================================
 
 #include "binary_file.h"
-#include "scan_results.h"
+#include "scanner.h"
 #include "vuln_report.h"
 #include <iostream>
 #include <memory>
 
 void printUsage() {
-	std::cout << "vulnscan [path to file]\n";
+	std::cout << "vulnscan [binary file] [symbol file]\n";
 }
 
 
@@ -25,19 +25,36 @@ int main(int argc, char **argv) {
 	}
 
 	std::string sTargetPath(argv[1]);
-	IBinaryFile *pBinaryFile = nullptr;
-	SCAN_RESULT sr = BinaryFactory::GetBinary(sTargetPath, &pBinaryFile);
-	if (SCAN_FAILED(sr) || (pBinaryFile == nullptr)) {
+
+	std::unique_ptr<IBinaryFile> spBinaryFile;
+	SCAN_RESULT sr = BinaryFactory::GetBinary(sTargetPath, spBinaryFile);
+	if (SCAN_FAILED(sr) || (spBinaryFile == nullptr)) {
 		std::cout << "GetBinary failed: " << scanResultToString(sr) << std::endl;
 		return -1;
 	}
+
+	std::unique_ptr<IScanner> spScanner;
 	
-	VulnReport* pReport;
-	sr = pBinaryFile->scan(&pReport);
-	std::cout << scanResultToString(sr) << std::endl;
-	if SCAN_SUCCEED(sr)
-		std::cout << pReport->toString();
-	//std::string sSearch("test");
-	//sr = pBinaryFile->searchString(sSearch);
+	sr = CScannerFactory::getScanner(spScanner);
+	if (SCAN_FAILED(sr) || (spScanner == nullptr)) {
+		std::cout << "GetScanner failed: " << scanResultToString(sr) << std::endl;
+		return -1;
+	}
+
+	sr = spScanner->LoadSignatures();
+	if (SCAN_FAILED(sr)) {
+		std::cout << scanResultToString(sr) << std::endl;
+		return -1;
+	}
+
+	std::unique_ptr<IVulnReport> spVulnReport;
+	sr = spScanner->scanFile(spBinaryFile, spVulnReport);
+	if (SCAN_FAILED(sr) || (spVulnReport == nullptr)) {
+		std::cout << "scanFile failed: " << scanResultToString(sr) << std::endl;
+		return -1;
+	}
+
+	std::cout << spVulnReport->toString();
+
 	return 0;
 }

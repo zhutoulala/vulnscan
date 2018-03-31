@@ -8,13 +8,11 @@
 namespace Disassembler {
 
 typedef struct _InstructionSet {
-	cs_insn *pInsn;
+	cs_insn* pInsn;
 	size_t count;
 
 	~_InstructionSet() { cs_free(pInsn, count); }
 } InstructionSet;
-
-//typedef cs_insn InstructionSet;
 	
-SCAN_RESULT Disassembly(const std::vector<uint8_t>& vCode, InstructionSet& instructions);
+SCAN_RESULT Disassembly(const uint8_t* code, size_t size, uint64_t baseAddress, InstructionSet& instructions);
 };

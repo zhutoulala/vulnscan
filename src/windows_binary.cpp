@@ -14,40 +14,49 @@
 uint64_t WindowsBinary::codeSectionBase;
 uint32_t WindowsBinary::codeSectionSize;
 
-WindowsBinary::WindowsBinary(std::string sFilePath) : IBinaryFile(sFilePath){
-
+WindowsBinary::WindowsBinary(std::string sFilePath){
+	this->sFilePath = sFilePath;
+	vCode = std::vector<uint8_t>();
+	vStrings = std::vector<std::string>();
 }
 
-SCAN_RESULT WindowsBinary::scan(VulnReport** ppReport) {	
-	*ppReport = new VulnReport();
+void WindowsBinary::addSymbols(std::string sSymbolPath) {
+	spSymbols = CSymbolsFactory::getSymbols(sSymbolPath);
+	assert(spSymbols != nullptr);
 
-	std::vector<std::string> vStrings;
-	SCAN_RESULT sr = getStrings(vStrings);
-	if SCAN_SUCCEED(sr) {
-		sr = (*ppReport)->SearchForCVEbyString(vStrings);
-		if SCAN_FAILED(sr) {
-			return sr;
-		}
-	}
-	
-	std::vector<uint8_t> vCode;
-	sr = getCodeSection(vCode);
-	if SCAN_SUCCEED(sr) {
-		Disassembler::InstructionSet instructionSet;
-		sr = Disassembler::Disassembly(vCode, instructionSet);
-		if SCAN_FAILED(sr) {
-			return sr;
-		}	
-		sr = (*ppReport)->SearchForCVEbyCode(instructionSet);
-		if SCAN_FAILED(sr) {
-			return sr;
-		}
-	}
-
-	return SCAN_RESULT_SUCCESS;
+	spSymbols->loadSymbols();
 }
 
-SCAN_RESULT WindowsBinary::getCodeSection(std::vector<uint8_t>& vCode) {
+SCAN_RESULT WindowsBinary::analyze() {
+	addSymbols(sFilePath); // use self contained symbols
+	SCAN_RESULT sr = readStrings();
+	if (SCAN_FAILED(sr))
+		return sr;
+	return readCodeSection(); // read code section into memory
+}
+
+
+uint64_t WindowsBinary::getCodeSectionBase() {
+	return WindowsBinary::codeSectionBase;
+}
+
+size_t WindowsBinary::getCodeSectionSize() {
+	return WindowsBinary::codeSectionSize;
+}
+
+SCAN_RESULT WindowsBinary::getInstFromAddress(uint64_t ullAddress, size_t iLength, 
+	std::unique_ptr<Disassembler::InstructionSet>& spInstSet) {
+	assert(spInstSet == nullptr);
+
+	spInstSet = std::make_unique<Disassembler::InstructionSet>();
+	return Disassembler::Disassembly(vCode.data() + ullAddress - codeSectionBase, iLength, ullAddress, *spInstSet);
+}
+
+SCAN_RESULT WindowsBinary::readCodeSection() {
+
+	if (vCode.size() > 0) {
+		return SCAN_RESULT_SUCCESS; // already loaded
+	}
 	peparse::parsed_pe *pParsedPE = peparse::ParsePEFromFile(sFilePath.c_str());
 	if (pParsedPE == nullptr) {
 		std::cout << "Error: " << peparse::GetPEErr() << " (" << peparse::GetPEErrString() << ")" << endl;
@@ -55,15 +64,7 @@ SCAN_RESULT WindowsBinary::getCodeSection(std::vector<uint8_t>& vCode) {
 		return SCAN_RESULT_PE_PARSE_ERROR;
 	}
 	IterSec(pParsedPE, WindowsBinary::locateCodeSection, NULL);
-	/*peparse::VA entryPoint;
-	if (peparse::GetEntryPoint(pParsedPE, entryPoint)) {
-		// read the first 1000 bytes for now
-		for (size_t i = 0; i < 10000; i++) {
-			uint8_t b;
-			peparse::ReadByteAtVA(pParsedPE, i + entryPoint, b);
-			vCode.push_back(b);
-		}
-	}*/
+
 	for (size_t i = 0; i < WindowsBinary::codeSectionSize; i++) {
 		uint8_t b;
 		peparse::ReadByteAtVA(pParsedPE, i + WindowsBinary::codeSectionBase, b);
@@ -87,7 +88,7 @@ int WindowsBinary::locateCodeSection(void *N,
 	return 0;
 }
 
-SCAN_RESULT WindowsBinary::getStrings(std::vector<std::string>& vStrings) {
+SCAN_RESULT WindowsBinary::readStrings() {
 	STRING_OPTIONS options;
 	options.printUniqueGlobal = false;
 	options.printUniqueLocal = false;
@@ -111,4 +112,8 @@ SCAN_RESULT WindowsBinary::getStrings(std::vector<std::string>& vStrings) {
 		return SCAN_RESULT_SUCCESS;
 	else
 		return SCAN_RESULT_PE_PARSE_ERROR;
+}
+
+bool WindowsBinary::searchStrings(std::string sSearch) {
+	return std::find(vStrings.begin(), vStrings.end(), sSearch) != vStrings.end();
 }
