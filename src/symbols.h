@@ -18,6 +18,7 @@ public:
 	virtual SCAN_RESULT loadSymbols() = 0;
 	virtual SCAN_RESULT unloadSymbols() = 0;
 	virtual SCAN_RESULT getSymbolFromAddress(PSYMBOLMAP pSymbolMap) = 0;
+	virtual uint64_t getLoadedAddress() = 0;
 };
 
 #ifdef _WIN32
@@ -33,6 +34,7 @@ public:
 	SCAN_RESULT getSymbolFromAddress(PSYMBOLMAP pSymbolMap);
 	SCAN_RESULT enumSymbols(DWORD64 ModBase);
 	void ShowSymbolInfo(DWORD64 ModBase);
+	inline uint64_t getLoadedAddress() { return dwLoadedAddr; }
 
 private:
 	std::string sSymbolPath;

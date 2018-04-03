@@ -54,6 +54,11 @@ public:
 	 * Get the symbol information for currect binary file
 	 */
 	virtual std::shared_ptr<ISymbols> getSymbols() = 0;
+
+	/**
+	 * Check if the binary file 64-bit
+	 */
+	virtual bool is64bit() = 0;
 };
 
 
@@ -78,6 +83,10 @@ public:
 	
 
 	inline std::shared_ptr<ISymbols> getSymbols() { return spSymbols; }
+
+	inline bool is64bit() {
+		return codeSectionBase > 0xffffffff;
+	}
 
 public:
 	static int locateCodeSection(void *N,
@@ -124,6 +133,7 @@ public:
 	
 
 	inline std::shared_ptr<ISymbols> getSymbols() { return spSymbols; }
+	bool is64bit() { return false; }
 
 private:
 	SCAN_RESULT readStrings();

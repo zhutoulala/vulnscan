@@ -36,6 +36,15 @@ public:
 	SCAN_RESULT scanFile(std::unique_ptr<IBinaryFile>& spBinaryFile, std::unique_ptr<IVulnReport>& spVulnReport);
 
 private:
+	/**
+	 * get the symbol for an instruction depending on if such symbol info is useful
+	 * @param[in] spSymbols - shared pointer to ISymbols interface
+	 * @param[in] pInst - pointer to the instruction
+	 * @return symbol or empty string
+	 */
+	std::string getSymbolIfNeed(std::shared_ptr<ISymbols> spSymbols, const Disassembler::PInstruction pInst);
+
+private:
 	std::shared_ptr<SignatureLoader> spSigLoader;
 	bool bSigLoaded;
 };

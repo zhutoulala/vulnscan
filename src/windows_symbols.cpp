@@ -30,11 +30,11 @@ SCAN_RESULT CPDBSymbols::loadSymbols() {
 		return FALSE;
 	}
 
-	DWORD64 dwLoadedAddr = SymLoadModuleEx(hProcess,    // target process 
+	dwLoadedAddr = SymLoadModuleEx(hProcess,    // target process 
 		NULL,        // handle to image - not used
 		sSymbolPath.c_str(), // name of image file
 		NULL,        // name of module - not required
-		0,			 // can't be zero since loading from .pdb
+		0,			 // can't be zero if loading from .pdb
 		0,           // size of image - not required
 		NULL,        // MODLOAD_DATA used for special cases 
 		0);          // flags - not required
@@ -45,8 +45,8 @@ SCAN_RESULT CPDBSymbols::loadSymbols() {
 		return SCAN_RESULT_SYMBOL_NOT_LOADED;
 	}
 	bSymbolLoaded = true;
-	//ShowSymbolInfo(dwLoadedAddr);
-	//enumSymbols(dwLoadedAddr);
+	ShowSymbolInfo(dwLoadedAddr);
+	enumSymbols(dwLoadedAddr);
 	return SCAN_RESULT_SUCCESS;
 }
 

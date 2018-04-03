@@ -29,9 +29,9 @@ void WindowsBinary::addSymbols(std::string sSymbolPath) {
 
 SCAN_RESULT WindowsBinary::analyze() {
 	addSymbols(sFilePath); // use self contained symbols
-	SCAN_RESULT sr = readStrings();
-	if (SCAN_FAILED(sr))
-		return sr;
+	//SCAN_RESULT sr = readStrings();
+	//if (SCAN_FAILED(sr))
+	//	return sr;
 	return readCodeSection(); // read code section into memory
 }
 
@@ -49,7 +49,7 @@ SCAN_RESULT WindowsBinary::getInstFromAddress(uint64_t ullAddress, size_t iLengt
 	assert(spInstSet == nullptr);
 
 	spInstSet = std::make_unique<Disassembler::InstructionSet>();
-	return Disassembler::Disassembly(vCode.data() + ullAddress - codeSectionBase, iLength, ullAddress, *spInstSet);
+	return Disassembler::Disassembly(vCode.data() + ullAddress - codeSectionBase, iLength, ullAddress, is64bit(), *spInstSet);
 }
 
 SCAN_RESULT WindowsBinary::readCodeSection() {

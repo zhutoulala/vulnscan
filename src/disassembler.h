@@ -7,6 +7,8 @@
 
 namespace Disassembler {
 
+typedef struct cs_insn Instruction, *PInstruction;
+
 typedef struct _InstructionSet {
 	cs_insn* pInsn;
 	size_t count;
@@ -14,5 +16,5 @@ typedef struct _InstructionSet {
 	~_InstructionSet() { cs_free(pInsn, count); }
 } InstructionSet;
 	
-SCAN_RESULT Disassembly(const uint8_t* code, size_t size, uint64_t baseAddress, InstructionSet& instructions);
+SCAN_RESULT Disassembly(const uint8_t* code, size_t size, uint64_t baseAddress, bool b64bit, InstructionSet& instructions);
 };
