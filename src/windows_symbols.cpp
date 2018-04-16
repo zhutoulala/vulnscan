@@ -46,7 +46,7 @@ SCAN_RESULT CPDBSymbols::loadSymbols() {
 	}
 	bSymbolLoaded = true;
 	ShowSymbolInfo(dwLoadedAddr);
-	enumSymbols(dwLoadedAddr);
+	//enumSymbols(dwLoadedAddr);
 	return SCAN_RESULT_SUCCESS;
 }
 

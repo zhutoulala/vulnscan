@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-typedef long SCAN_RESULT;
+typedef uint32_t SCAN_RESULT;
 
 #define SCAN_RESULT_SUCCESS 0x00000000
 #define SCAN_RESULT_NOT_FOUND 0x00000001
@@ -28,4 +28,25 @@ static std::string scanResultToString(SCAN_RESULT sr) {
 		case SCAN_RESULT_SYMBOL_NOT_FOUND:			return "Symbol could not be found for given address";
 		default: return "Invalid scan result";
 	}
+}
+
+
+typedef uint32_t DETECTION_STATUS;
+
+#define DETECTION_NOMATCH 0x00000000
+#define DETECTION_STRING_MATCH 0x00000001
+#define DETECTION_ASM_MATCH 0x00000010
+#define DETECTION_POSITIVE_MATCH 0x00000100
+#define DETECTION_NEGATIVE_MATCH 0x00001000
+
+
+typedef uint8_t DETECTION_CONFIDENCE;
+
+static DETECTION_CONFIDENCE detectionToConfidence(DETECTION_STATUS status) {
+	DETECTION_CONFIDENCE confident = 0;
+	while (status) {
+		if (status & 0x00000001) confident++;
+		status = status >> 1;
+	}
+	return confident;
 }

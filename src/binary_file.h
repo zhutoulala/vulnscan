@@ -51,6 +51,11 @@ public:
 	virtual bool searchStrings(std::string sSearch) = 0;
 
 	/**
+	 * get the string list by reference
+	 */
+	virtual const std::vector<std::string>& getStrings() = 0;
+
+	/**
 	 * Get the symbol information for currect binary file
 	 */
 	virtual std::shared_ptr<ISymbols> getSymbols() = 0;
@@ -80,7 +85,9 @@ public:
 	
 	bool searchStrings(std::string sSearch);
 
-	
+	inline const std::vector<std::string>& getStrings() {
+		return vStrings;
+	}
 
 	inline std::shared_ptr<ISymbols> getSymbols() { return spSymbols; }
 
@@ -104,6 +111,7 @@ private:
 	SCAN_RESULT readStrings();
 
 private:
+	bool bAnalyzed;
 	std::string sFilePath;
 	std::vector<uint8_t> vCode;
 	std::vector<std::string> vStrings;
@@ -130,7 +138,9 @@ public:
 
 	bool searchStrings(std::string sSearch);
 
-	
+	inline const std::vector<std::string>& getStrings() {
+		return vStrings;
+	}
 
 	inline std::shared_ptr<ISymbols> getSymbols() { return spSymbols; }
 	bool is64bit() { return false; }
@@ -140,22 +150,23 @@ private:
 
 private:
 	std::shared_ptr<ISymbols> spSymbols;
+	std::vector<std::string> vStrings;
 };
 
 
 class BinaryFactory {
 public:
-	static SCAN_RESULT GetBinary(std::string sFilePath, std::unique_ptr<IBinaryFile>& spBinaryFile) {
+	static SCAN_RESULT GetBinary(std::string sFilePath, std::shared_ptr<IBinaryFile>& spBinaryFile) {
 		FileTyper typer(sFilePath);
 		if (!typer.isBinary()) {
 			return SCAN_RESULT_NOT_BINARY;
 		}
 		else if (typer.isEXE()) {
-			spBinaryFile = std::make_unique<WindowsBinary>(sFilePath);
+			spBinaryFile = std::make_shared<WindowsBinary>(sFilePath);
 			return SCAN_RESULT_SUCCESS;
 		}
 		else if (typer.isELF()) {
-			spBinaryFile = std::make_unique<LinuxBinary>(sFilePath);
+			spBinaryFile = std::make_shared<LinuxBinary>(sFilePath);
 		}
 
 		return SCAN_RESULT_NOT_SUPPORT;

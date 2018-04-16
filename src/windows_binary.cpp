@@ -18,6 +18,7 @@ WindowsBinary::WindowsBinary(std::string sFilePath){
 	this->sFilePath = sFilePath;
 	vCode = std::vector<uint8_t>();
 	vStrings = std::vector<std::string>();
+	bAnalyzed = false;
 }
 
 void WindowsBinary::addSymbols(std::string sSymbolPath) {
@@ -28,11 +29,17 @@ void WindowsBinary::addSymbols(std::string sSymbolPath) {
 }
 
 SCAN_RESULT WindowsBinary::analyze() {
+	if (bAnalyzed)
+		return SCAN_RESULT_SUCCESS;
 	addSymbols(sFilePath); // use self contained symbols
-	//SCAN_RESULT sr = readStrings();
-	//if (SCAN_FAILED(sr))
-	//	return sr;
-	return readCodeSection(); // read code section into memory
+	SCAN_RESULT sr = readStrings();
+	if (SCAN_FAILED(sr))
+		return sr;
+	sr = readCodeSection(); // read code section into memory
+	if (SCAN_FAILED(sr))
+		return sr;
+	bAnalyzed = true;
+	return SCAN_RESULT_SUCCESS;
 }
 
 

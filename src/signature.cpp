@@ -2,8 +2,13 @@
 #include <fstream>
 #include <sstream>
 #include <iterator>
+#include <algorithm>
 
-bool Signature::stringMatch(const std::vector<std::string>& vLookupStrings) {
+CSignature::CSignature(std::string sCVE) : sCVE(sCVE) {
+
+}
+
+DETECTION_STATUS CSignature::stringMatch(const std::vector<std::string>& vLookupStrings) {
 	size_t iPositiveCount = 0;
 	size_t iNegativeCount = 0;
 	for (auto eachLookup : vLookupStrings) {
@@ -17,30 +22,59 @@ bool Signature::stringMatch(const std::vector<std::string>& vLookupStrings) {
 		}
 	}
 
-	return ((iPositiveCount == vPostiveStrings.size()) && (iNegativeCount == 0));
+	DETECTION_STATUS status = DETECTION_NOMATCH;
+	if (iPositiveCount == vPostiveStrings.size()) {
+		status = DETECTION_STRING_MATCH | DETECTION_POSITIVE_MATCH;
+	}
+
+	if (iNegativeCount > 0)
+		status |= DETECTION_STRING_MATCH | DETECTION_POSITIVE_MATCH;
+	return status;
 }
 
-bool Signature::asmCodeMatch(const Disassembler::InstructionSet& instructionSet) {
+DETECTION_STATUS CSignature::callSequenceMatch(const std::vector<std::string>& vCallSequence) {
 	// TODO - add symbols
-	return false;
-	/*size_t iPositiveCount = 0;
-	size_t iNegativeCount = 0;
-	for (size_t i = 0; i < instructionSet.count; i++) {
-		for (auto eachPositive : vPostiveASM) {
-			if (((eachPositive.find(instructionSet.pInsn[i].mnemonic) != std::string::npos))
-				&& (eachPositive.find(instructionSet.pInsn[i].op_str) != std::string::npos))
-				iPositiveCount++;
-		}
-		for (auto eachNegative : vNegativeASM) {
-			if (((eachNegative.find(instructionSet.pInsn[i].mnemonic) != std::string::npos))
-				&& (eachNegative.find(instructionSet.pInsn[i].op_str) != std::string::npos))
-				iNegativeCount++;
-		}
-		instructionSet.pInsn[i].mnemonic,
-			instructionSet.pInsn[i].op_str;
+	DETECTION_STATUS status = DETECTION_NOMATCH;
+	if (vCallSequence.empty()) {
+		return status;
 	}
+	if (!vPostiveCalls.empty() && isSubSet(vPostiveCalls, vCallSequence)) {
+		status = DETECTION_ASM_MATCH | DETECTION_POSITIVE_MATCH;
+	}
+
+	if (!vNegativeCalls.empty() && isSubSet(vNegativeCalls, vCallSequence)) {
+		status |= DETECTION_ASM_MATCH | DETECTION_NEGATIVE_MATCH;
+	}
+
+	return status;
+}
+
+bool CSignature::isSubSet(const std::vector<std::string>& v1, const std::vector<std::string>& v2) {
+	auto it1 = v1.begin();
+	auto it2 = v2.begin();
 	
-	return ((iPositiveCount == vPostiveStrings.size()) && (iNegativeCount == 0));*/
+	while (it1 != v1.end()) {
+		while (it2 != v2.end()) {
+			std::string sLowerCase1(*it1), sLowerCase2(*it2);
+			
+			std::transform(sLowerCase1.begin(), sLowerCase1.end(), sLowerCase1.begin(), ::tolower);
+			std::transform(sLowerCase2.begin(), sLowerCase2.end(), sLowerCase2.begin(), ::tolower);
+			if (sLowerCase1 != sLowerCase2) {
+				it2++;
+				continue;
+			}
+			else {
+				it2++;
+				break;
+			}
+		}
+		if (it2 == v2.end()) {
+			return false;
+		}
+		else 
+			it1++;
+	}
+	return true;
 }
 
 bool SignatureLoader::load(std::string sSigsFilePath) {
@@ -51,7 +85,7 @@ bool SignatureLoader::load(std::string sSigsFilePath) {
 		in.close();
 		return true;
 	}	
-	return true;
+	return false;
 }
 
 void SignatureLoader::loadSigs(std::istream & in)
@@ -59,7 +93,7 @@ void SignatureLoader::loadSigs(std::istream & in)
 	std::string sLine;
 	while (std::getline(in, sLine)) {
 		if (sLine.compare(0, 3, "CVE-")) {
-			std::shared_ptr<Signature> spSignature = std::make_shared<Signature>(sLine);
+			std::shared_ptr<CSignature> spSignature = std::make_shared<CSignature>(sLine);
 			vspSignatures.push_back(spSignature);
 			if (std::getline(in, sLine) && (sLine == "STRING:")) {
 				while (std::getline(in, sLine)) {
@@ -82,16 +116,22 @@ void SignatureLoader::loadSigs(std::istream & in)
 					while (std::getline(in, sLine)) {
 						if (sLine.empty()) break;
 						else if (sLine.at(0) == '+') {
-							std::istringstream iss(sLine.substr(2));
+							std::string sFunctionCalls(sLine.substr(2));
+							size_t iPos = sFunctionCalls.find(':');
+							spSignature->setFunctionName(sFunctionCalls.substr(0, iPos));
+							std::istringstream iss(sFunctionCalls.substr(iPos+1));
 							std::vector<std::string> vSplits(std::istream_iterator<std::string>{iss},
 								std::istream_iterator<std::string>());
-							spSignature->addPostiveASM(vSplits);
+							spSignature->setPostiveCalls(vSplits);
 						}
 						else if (sLine.at(0) == '-') {
-							std::istringstream iss(sLine.substr(2));
+							std::string sFunctionCalls(sLine.substr(2));
+							size_t iPos = sFunctionCalls.find(':');
+							spSignature->setFunctionName(sFunctionCalls.substr(0, iPos));
+							std::istringstream iss(sFunctionCalls.substr(iPos + 1));
 							std::vector<std::string> vSplits(std::istream_iterator<std::string>{iss},
 								std::istream_iterator<std::string>());
-							spSignature->addNegativeASM(vSplits);
+							spSignature->setNegativeCalls(vSplits);
 						}
 						else
 						{

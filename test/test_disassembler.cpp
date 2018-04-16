@@ -17,8 +17,12 @@ TEST(Disassembler, Disassembly)
 	vCode.push_back(0x00);
 
 	Disassembler::InstructionSet instructions;
-	SCAN_RESULT sr = Disassembler::Disassembly(vCode, instructions);
+	SCAN_RESULT sr = Disassembler::Disassembly(vCode.data(), vCode.size(), 0, false, instructions);
 	ASSERT_EQ(sr, SCAN_RESULT_SUCCESS);
-	ASSERT_EQ(instructions.count, 6);
+	ASSERT_EQ(instructions.count, 3);
 
+	Disassembler::InstructionSet instructions64;
+	sr = Disassembler::Disassembly(vCode.data(), vCode.size(), 0, true, instructions64);
+	ASSERT_EQ(sr, SCAN_RESULT_SUCCESS);
+	ASSERT_EQ(instructions64.count, 2);
 }

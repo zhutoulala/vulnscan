@@ -105,7 +105,9 @@ add_executable(
 	src/disassembler.cpp
 	src/signature.cpp
 	src/windows_symbols.cpp
-	src/scanner.cpp
+	src/asm_scanner.cpp
+	src/string_scanner.cpp
+	src/scan_engine.cpp
     )
 
 target_link_libraries(
@@ -128,7 +130,8 @@ add_executable(
 	test/test_windows_binary.cpp
 	test/test_file_typer.cpp
 	test/test_disassembler.cpp
-	#test/test_signature.cpp
+	test/test_signature.cpp
+	test/test_vulnerability.cpp
     )
 
 target_link_libraries(
