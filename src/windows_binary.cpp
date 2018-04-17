@@ -57,7 +57,8 @@ SCAN_RESULT WindowsBinary::getInstFromAddress(uint64_t ullAddress, size_t iLengt
 	assert(spInstSet == nullptr);
 
 	spInstSet = std::make_unique<Disassembler::InstructionSet>();
-	return Disassembler::Disassembly(vCode.data() + ullAddress - codeSectionBase, iLength, ullAddress, is64bit(), *spInstSet);
+	return Disassembler::Disassembly(vCode.data() + ullAddress - codeSectionBase, 
+		iLength, ullAddress, is64bit(), *spInstSet);
 }
 
 SCAN_RESULT WindowsBinary::readCodeSection() {
@@ -67,7 +68,8 @@ SCAN_RESULT WindowsBinary::readCodeSection() {
 	}
 	peparse::parsed_pe *pParsedPE = peparse::ParsePEFromFile(sFilePath.c_str());
 	if (pParsedPE == nullptr) {
-		std::cout << "Error: " << peparse::GetPEErr() << " (" << peparse::GetPEErrString() << ")" << endl;
+		std::cout << "Error: " << peparse::GetPEErr() << " (" << 
+			peparse::GetPEErrString() << ")" << endl;
 		std::cout << "Location: " << peparse::GetPEErrLoc() << endl;
 		return SCAN_RESULT_PE_PARSE_ERROR;
 	}

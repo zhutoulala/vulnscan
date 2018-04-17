@@ -72,7 +72,7 @@ void print_buffer::addLine(char* string, int length)
 	if( space_used + length + 3 >= buffer_size )
 	{
 		// Digest this string without buffering it
-		printf( "%s", string );
+		//printf( "%s", string );
 	}else{
 		// Add it to the buffer
 		memcpy( buffer + space_used, string, length );

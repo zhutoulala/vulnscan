@@ -82,7 +82,8 @@ public:
 	/**
 	 * check if v1 is a subset of v2
  	 */
-	bool isSubSet(const std::vector<std::string>& v1, const std::vector<std::string>& v2);
+	template<class T>
+	bool isSubSet(const std::vector<T>& v1, const std::vector<T>& v2);
 
 private:
 	std::string sCVE;

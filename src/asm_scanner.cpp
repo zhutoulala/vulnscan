@@ -43,7 +43,8 @@ SCAN_RESULT CASMScanner::scan(std::shared_ptr<IVulnReport>& spVulnReport) {
 
 
 bool CASMScanner::getNextFunction(std::string& sFunction) {
-	iCurrentOffset = seekToInstruction(iCurrentOffset + 1, iBatchSize, "push", { "ebp", "rbp" });
+	iCurrentOffset = seekToInstruction(iCurrentOffset + 1, 
+		iBatchSize, "push", { "ebp", "rbp" });
 
 	if (iCurrentOffset == 0) {
 		std::cout << "Couldn't get next function" << std::endl;
@@ -65,13 +66,15 @@ size_t CASMScanner::seekToInstruction(uint64_t iStartPos, size_t iBatchSize,
 
 		std::unique_ptr<Disassembler::InstructionSet> spInstSet;
 
-		if (SCAN_FAILED(spBinaryFile->getInstFromAddress(ullCodeSectionBase + iStartPos, iBatchSize, spInstSet))) {
+		if (SCAN_FAILED(spBinaryFile->getInstFromAddress(
+			ullCodeSectionBase + iStartPos, iBatchSize, spInstSet))) {
 			std::cout << "Failed to get instruction from address: " << iStartPos << std::endl;
 			return 0;
 		}
 		
 		for (size_t i = 0; i < spInstSet->count; i++) {
-			//printf("0x%" PRIx64 ":\t%s\t\t%s", spInstSet->pInsn[i].address, spInstSet->pInsn[i].mnemonic, spInstSet->pInsn[i].op_str);
+			//printf("0x%" PRIx64 ":\t%s\t\t%s", spInstSet->pInsn[i].address, 
+			//spInstSet->pInsn[i].mnemonic, spInstSet->pInsn[i].op_str);
 			
 			if (sMnemonic.compare(spInstSet->pInsn[i].mnemonic) == 0) {
 				for (auto sOperand : vsOperand) {
@@ -141,7 +144,9 @@ bool CASMScanner::getCallSequence(std::string sFunction, std::vector<std::string
 	}
 
 	std::unique_ptr<Disassembler::InstructionSet> spInstSet;
-	if (SCAN_FAILED(spBinaryFile->getInstFromAddress(ullCodeSectionBase + iFunctionStart, iCurrentOffset - iFunctionStart, spInstSet))) {
+	if (SCAN_FAILED(spBinaryFile->getInstFromAddress(
+		ullCodeSectionBase + iFunctionStart, 
+		iCurrentOffset - iFunctionStart, spInstSet))) {
 		std::cout << "Failed to get instructions from function: " << sFunction << std::endl;
 		return false;
 	}

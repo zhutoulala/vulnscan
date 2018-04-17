@@ -32,8 +32,9 @@ DETECTION_STATUS CSignature::stringMatch(const std::vector<std::string>& vLookup
 	return status;
 }
 
-DETECTION_STATUS CSignature::callSequenceMatch(const std::vector<std::string>& vCallSequence) {
-	// TODO - add symbols
+DETECTION_STATUS CSignature::callSequenceMatch(
+	const std::vector<std::string>& vCallSequence) {
+	
 	DETECTION_STATUS status = DETECTION_NOMATCH;
 	if (vCallSequence.empty()) {
 		return status;
@@ -49,7 +50,9 @@ DETECTION_STATUS CSignature::callSequenceMatch(const std::vector<std::string>& v
 	return status;
 }
 
-bool CSignature::isSubSet(const std::vector<std::string>& v1, const std::vector<std::string>& v2) {
+template<class T>
+bool CSignature::isSubSet(const std::vector<T>& v1, 
+	const std::vector<T>& v2) {
 	auto it1 = v1.begin();
 	auto it2 = v2.begin();
 	
@@ -57,8 +60,10 @@ bool CSignature::isSubSet(const std::vector<std::string>& v1, const std::vector<
 		while (it2 != v2.end()) {
 			std::string sLowerCase1(*it1), sLowerCase2(*it2);
 			
-			std::transform(sLowerCase1.begin(), sLowerCase1.end(), sLowerCase1.begin(), ::tolower);
-			std::transform(sLowerCase2.begin(), sLowerCase2.end(), sLowerCase2.begin(), ::tolower);
+			std::transform(sLowerCase1.begin(), sLowerCase1.end(), 
+				sLowerCase1.begin(), ::tolower);
+			std::transform(sLowerCase2.begin(), sLowerCase2.end(), 
+				sLowerCase2.begin(), ::tolower);
 			if (sLowerCase1 != sLowerCase2) {
 				it2++;
 				continue;
