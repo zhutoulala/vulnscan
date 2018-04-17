@@ -9,6 +9,7 @@
 #include <memory>
 #include <fstream>
 #include <future>
+#include <algorithm>
 
 
 uint64_t WindowsBinary::codeSectionBase;

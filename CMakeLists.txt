@@ -6,7 +6,7 @@ enable_language(C)
 enable_language(CXX)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
-    set(CMAKE_CXX_FLAGS         "-std=c++11 -Wall -Wno-unknown-pragmas -Wno-sign-compare -Woverloaded-virtual -Wwrite-strings -Wno-unused")
+    set(CMAKE_CXX_FLAGS         "-std=c++14 -Wall -Wno-unknown-pragmas -Wno-sign-compare -Woverloaded-virtual -Wwrite-strings -Wno-unused")
     set(CMAKE_CXX_FLAGS_DEBUG   "-O0 -g3")
     set(CMAKE_CXX_FLAGS_RELEASE "-O3")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
@@ -126,6 +126,7 @@ add_executable(
 	src/vulnerability.cpp
 	src/disassembler.cpp
 	src/signature.cpp	
+	src/windows_symbols.cpp
 	test/main.cpp	
 	test/test_windows_binary.cpp
 	test/test_file_typer.cpp

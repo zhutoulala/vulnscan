@@ -1,13 +1,13 @@
-#ifdef _WIN32 // will need DbgHelp
 #include "symbols.h"
 
+#ifdef _WIN32 // will need DbgHelp
 #include <Windows.h>
 #include <tchar.h>
 #include <assert.h>
 #include <DbgHelp.h>
 #include <iostream>
 #pragma comment(lib, "dbghelp.lib")
-
+#endif //  _WIN32
 
 CPDBSymbols::CPDBSymbols(std::string sSymbolFile){
 	sSymbolPath = sSymbolFile;
@@ -15,7 +15,13 @@ CPDBSymbols::CPDBSymbols(std::string sSymbolFile){
 	hProcess = nullptr;
 }
 
+CPDBSymbols::~CPDBSymbols() {
+	
+}
+
 SCAN_RESULT CPDBSymbols::loadSymbols() {
+	#ifdef _WIN32 // will need DbgHelp
+
 	DWORD  error;
 
 	SymSetOptions(SYMOPT_UNDNAME);
@@ -47,8 +53,12 @@ SCAN_RESULT CPDBSymbols::loadSymbols() {
 	bSymbolLoaded = true;
 	ShowSymbolInfo(dwLoadedAddr);
 	//enumSymbols(dwLoadedAddr);
+	#endif //  _WIN32
+
 	return SCAN_RESULT_SUCCESS;
 }
+
+#ifdef _WIN32 // will need DbgHelp
 
 BOOL CALLBACK EnumSymProc(
 	PSYMBOL_INFO pSymInfo,
@@ -62,7 +72,11 @@ BOOL CALLBACK EnumSymProc(
 	return TRUE;
 }
 
+#endif //  _WIN32
+
 SCAN_RESULT CPDBSymbols::enumSymbols(DWORD64 ModBase) {
+	#ifdef _WIN32 // will need DbgHelp
+
 	if (!bSymbolLoaded)
 		return SCAN_RESULT_SYMBOL_NOT_LOADED;
 
@@ -76,10 +90,14 @@ SCAN_RESULT CPDBSymbols::enumSymbols(DWORD64 ModBase) {
 		printf("SymEnumSymbols failed: %d\n", GetLastError());
 	}
 
+	#endif //  _WIN32
 	return SCAN_RESULT_SUCCESS;
 }
 
 SCAN_RESULT CPDBSymbols::getSymbolFromAddress(PSYMBOLMAP pSymbolMap) {
+
+	#ifdef _WIN32 // will need DbgHelp
+
 	assert(pSymbolMap != nullptr);
 	assert(pSymbolMap->iAddress != 0);
 
@@ -102,10 +120,14 @@ SCAN_RESULT CPDBSymbols::getSymbolFromAddress(PSYMBOLMAP pSymbolMap) {
 		return SCAN_RESULT_SYMBOL_NOT_FOUND;
 	}
 	pSymbolMap->sName = std::string(pSymbol->Name, pSymbol->NameLen);
+	#endif //  _WIN32
+
 	return SCAN_RESULT_SUCCESS;
 }
 
 SCAN_RESULT CPDBSymbols::unloadSymbols() {
+	#ifdef _WIN32 // will need DbgHelp
+
 	if (!bSymbolLoaded)
 		return SCAN_RESULT_SYMBOL_NOT_LOADED;
 
@@ -118,6 +140,7 @@ SCAN_RESULT CPDBSymbols::unloadSymbols() {
 		printf("SymUnloadModule64 returned error : %d\n", error);
 
 	}
+	#endif //  _WIN32
 
 	return SCAN_RESULT_SUCCESS;
 }
@@ -125,6 +148,7 @@ SCAN_RESULT CPDBSymbols::unloadSymbols() {
 void CPDBSymbols::ShowSymbolInfo(DWORD64 ModBase)
 {
 	// Get module information 
+	#ifdef _WIN32 // will need DbgHelp
 
 	IMAGEHLP_MODULE64 ModuleInfo;
 
@@ -240,6 +264,6 @@ void CPDBSymbols::ShowSymbolInfo(DWORD64 ModBase)
 
 	_tprintf(_T("Public symbols: %s \n"), ModuleInfo.Publics ? _T("Available") : _T("Not available"));
 
-
+	#endif //  _WIN32
 }
-#endif //  _WIN32
+

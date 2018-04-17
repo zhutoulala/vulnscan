@@ -4,7 +4,7 @@
 #include <memory>
 
 typedef void *HANDLE;
-typedef unsigned __int64 DWORD64, *PDWORD64;
+typedef uint64_t DWORD64;
 
 typedef struct _SYMBOLMAP {
 	int64_t iAddress;
@@ -21,12 +21,12 @@ public:
 	virtual uint64_t getLoadedAddress() = 0;
 };
 
-#ifdef _WIN32
+
 class CPDBSymbols : public ISymbols {
 
 public:
 	CPDBSymbols(std::string sSymbolFile);
-
+	~CPDBSymbols();
 public:
 	void setSymbolsPath(std::string sSymbolFile) {sSymbolPath = sSymbolFile;}
 	SCAN_RESULT loadSymbols();
@@ -43,7 +43,6 @@ private:
 	DWORD64 dwLoadedAddr;
 };
 
-#endif //_WIN32
 
 class CSymbolsFactory {
 public:

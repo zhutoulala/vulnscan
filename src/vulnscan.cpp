@@ -13,7 +13,7 @@
 #include <memory>
 
 void printUsage() {
-	std::cout << "vulnscan [binary file] [symbol file]\n";
+	std::cout << "vulnscan [binary file]\n";
 }
 
 
