@@ -28,7 +28,7 @@ DETECTION_STATUS CSignature::stringMatch(const std::vector<std::string>& vLookup
 	}
 
 	if (iNegativeCount > 0)
-		status |= DETECTION_STRING_MATCH | DETECTION_POSITIVE_MATCH;
+		status |= DETECTION_STRING_MATCH | DETECTION_NEGATIVE_MATCH;
 	return status;
 }
 

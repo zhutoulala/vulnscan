@@ -46,7 +46,7 @@ public:
 
 public:
 	inline bool hasFunctionSig() { 
-		return !sFunction.empty() && vPostiveCalls.size() > 0; 
+		return !sFunction.empty() && (vPostiveCalls.size() > 0 || vNegativeCalls.size() > 0);
 	}
 
 	inline bool hasStringSig() {
@@ -71,11 +71,11 @@ public:
 		vNegativeCalls = vCallSequence;
 	}
 
-	inline void addPostiveString(std::string& sPostiveString) {
+	inline void addPostiveString(const std::string& sPostiveString) {
 		vPostiveStrings.push_back(sPostiveString);
 	}
 
-	inline void addNegativeString(std::string& sNegativeString) {
+	inline void addNegativeString(const std::string& sNegativeString) {
 		vNegativeStrings.push_back(sNegativeString);
 	}
 
