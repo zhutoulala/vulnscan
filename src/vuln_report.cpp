@@ -46,7 +46,7 @@ void CVulnReport::addDetection(std::string sCVE, DETECTION_STATUS status) {
 	auto spVulnerablity = getVulnerablity(sCVE);
 	if (spVulnerablity == nullptr)
 		spVulnerablity = CVulnerablityFactory::getVulnerablity(sCVE);
-	spVulnerablity->setDetectStatus(status);
+	spVulnerablity->appendDetectStatus(status);
 	addVulnerablity(spVulnerablity);
 }
 /*
