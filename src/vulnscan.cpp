@@ -32,5 +32,5 @@ int main(int argc, char **argv) {
 
 	std::string sTargetPath(argv[1]);
 
-	return spScanEngine->scanFile(sTargetPath);
+	return spScanEngine->scanPath(sTargetPath);
 }
