@@ -26,11 +26,17 @@ int main(int argc, char **argv) {
 
 	auto spScanEngine = CScanEngineFactory::getScanEgnine();
 	if (spScanEngine == nullptr) {
-		std::cout << "Failed to initialize ScanEngine.\n";
+		std::cout << "Failed to initialize ScanEngine." << std::endl;
 		return -1;
 	}
 
 	std::string sTargetPath(argv[1]);
 
-	return spScanEngine->scanPath(sTargetPath);
+	if (!spScanEngine->scanPath(sTargetPath)) {
+		std::cout << "Failed to scan." << std::endl;
+		return -1;
+	}
+	spScanEngine->printResults();
+
+	return 0;
 }

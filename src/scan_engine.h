@@ -3,7 +3,7 @@
 #include "binary_file.h"
 #include "scanner.h"
 #include "vuln_report.h"
-
+#include <map>
 
 class IScanEngine {
 public:
@@ -11,15 +11,19 @@ public:
 	/**
 	 * scan target path, could be a folder or file
 	 */
-	virtual int scanPath(std::string sTargetPath) = 0;
+	virtual bool scanPath(std::string sTargetPath) = 0;
 
 	/**
 	 * start the target binary file
 	 * @param[in] sTargetPath - path to target file
-	 * @return 0 if succeed
+	 * @return true if succeed
 	 */
-	virtual int scanFile(std::string sTargetPath) = 0;
+	virtual bool scanFile(std::string sTargetPath) = 0;
 
+	/**
+	 * print scan results
+	 */
+	virtual void printResults() = 0;
 };
 
 
@@ -28,8 +32,9 @@ class CScanEngine : public IScanEngine {
 public:
 	CScanEngine();
 public:
-	int scanPath(std::string sTargetPath);
-	int scanFile(std::string sTargetPath);
+	bool scanPath(std::string sTargetPath);
+	bool scanFile(std::string sTargetPath);
+	void printResults();
 	inline const std::vector<std::string>& getScanList() {
 		return vScanList;
 	}
@@ -50,6 +55,7 @@ private:
 	std::shared_ptr<SignatureLoader> spSigLoader;
 	bool bSigLoaded;
 	std::vector<std::string> vScanList;
+	std::map<std::string, std::shared_ptr<IVulnReport>> mSucceedScans;
 };
 
 
