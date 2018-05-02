@@ -33,7 +33,7 @@ public:
 	SCAN_RESULT unloadSymbols();
 	SCAN_RESULT getSymbolFromAddress(PSYMBOLMAP pSymbolMap);
 	SCAN_RESULT enumSymbols(DWORD64 ModBase);
-	void ShowSymbolInfo(DWORD64 ModBase);
+	bool ShowSymbolInfo(DWORD64 ModBase);
 	inline uint64_t getLoadedAddress() { return dwLoadedAddr; }
 
 private:

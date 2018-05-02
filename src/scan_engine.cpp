@@ -114,4 +114,5 @@ void CScanEngine::printResults() {
 		}
 		std::cout << std::endl;
 	}
+	std::cout << "==================================================\n";
 }

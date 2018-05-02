@@ -51,7 +51,9 @@ SCAN_RESULT CPDBSymbols::loadSymbols() {
 		return SCAN_RESULT_SYMBOL_NOT_LOADED;
 	}
 	bSymbolLoaded = true;
-	ShowSymbolInfo(dwLoadedAddr);
+	if (!ShowSymbolInfo(dwLoadedAddr)) {
+		return SCAN_RESULT_SYMBOL_NOT_LOADED;
+	}
 	//enumSymbols(dwLoadedAddr);
 	#endif //  _WIN32
 
@@ -145,7 +147,7 @@ SCAN_RESULT CPDBSymbols::unloadSymbols() {
 	return SCAN_RESULT_SUCCESS;
 }
 
-void CPDBSymbols::ShowSymbolInfo(DWORD64 ModBase)
+bool CPDBSymbols::ShowSymbolInfo(DWORD64 ModBase)
 {
 	// Get module information 
 	#ifdef _WIN32 // will need DbgHelp
@@ -161,7 +163,7 @@ void CPDBSymbols::ShowSymbolInfo(DWORD64 ModBase)
 	if (!bRet)
 	{
 		_tprintf(_T("Error: SymGetModuleInfo64() failed. Error code: %u \n"), ::GetLastError());
-		return;
+		return false;
 	}
 
 
@@ -264,6 +266,7 @@ void CPDBSymbols::ShowSymbolInfo(DWORD64 ModBase)
 
 	_tprintf(_T("Public symbols: %s \n"), ModuleInfo.Publics ? _T("Available") : _T("Not available"));
 
+	return ModuleInfo.GlobalSymbols;
 	#endif //  _WIN32
 }
 

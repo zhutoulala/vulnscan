@@ -345,8 +345,8 @@ bool string_parser::processContents( unsigned char* filecontents, long bufferSiz
 				}
 
 				string tmpString( (char*) outputString, outputStringSize);
-				if( (!options.printUniqueLocal && !options.printUniqueGlobal)/* ||
-					!hashes.Contains( tmpString )*/ )
+				/*if( (!options.printUniqueLocal && !options.printUniqueGlobal)/* ||
+					!hashes.Contains( tmpString ) )
 				{
 					// Add this string has as necessary
 					/*
@@ -354,7 +354,7 @@ bool string_parser::processContents( unsigned char* filecontents, long bufferSiz
 						hashes.Global_Insert( tmpString );
 					else if( options.printUniqueLocal )
 						hashes.Local_Insert( tmpString );
-					*/
+					
 
 					if( options.printType && options.printFile )
 					{
@@ -366,7 +366,7 @@ bool string_parser::processContents( unsigned char* filecontents, long bufferSiz
 						printer->addStrings((char*)filename, ": ", (char*)outputString, "\n");
 					else
 						printer->addStrings((char*)outputString, "\n");
-				}
+				}*/
 				std::string s((char*)outputString);
 				vBuffer.push_back(s);
 			}

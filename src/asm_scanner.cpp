@@ -112,7 +112,6 @@ bool CASMScanner::getSymbolAtAddress(uint64_t ullAddress, std::string& sSymbol) 
 	SYMBOLMAP symbolMap;
 	symbolMap.iAddress = ullAddress;
 	if (SCAN_FAILED(spBinaryFile->getSymbols()->getSymbolFromAddress(&symbolMap))) {
-		std::cout << "Couldn't get symbol for function ending" << std::endl;
 		return false;
 	}
 	sSymbol = symbolMap.sName;
