@@ -9,8 +9,10 @@
 #pragma comment(lib, "dbghelp.lib")
 #endif //  _WIN32
 
-CPDBSymbols::CPDBSymbols(std::string sSymbolFile){
-	sSymbolPath = sSymbolFile;
+std::shared_ptr<ISymbols> CSymbolsFactory::g_spSymbols;
+
+CPDBSymbols::CPDBSymbols(){
+	sCurrentSymbol = std::string();
 	bSymbolLoaded = false;
 	hProcess = nullptr;
 }
@@ -19,7 +21,12 @@ CPDBSymbols::~CPDBSymbols() {
 	
 }
 
-SCAN_RESULT CPDBSymbols::loadSymbols() {
+void CPDBSymbols::loadSymbols() {
+	if (sCurrentSymbol.empty()) {
+		std::cout << "symbol file is not specified\n";
+		return;
+	} 
+	if (bSymbolLoaded) unloadSymbols();
 	#ifdef _WIN32 // will need DbgHelp
 
 	DWORD  error;
@@ -33,12 +40,11 @@ SCAN_RESULT CPDBSymbols::loadSymbols() {
 		// SymInitialize failed
 		error = GetLastError();
 		printf("SymInitialize returned error : %d\n", error);
-		return FALSE;
 	}
 
 	dwLoadedAddr = SymLoadModuleEx(hProcess,    // target process 
 		NULL,        // handle to image - not used
-		sSymbolPath.c_str(), // name of image file
+		sCurrentSymbol.c_str(), // name of image file
 		NULL,        // name of module - not required
 		0,			 // can't be zero if loading from .pdb
 		0,           // size of image - not required
@@ -48,16 +54,15 @@ SCAN_RESULT CPDBSymbols::loadSymbols() {
 	if (!dwLoadedAddr){
 		DWORD error = GetLastError();
 		printf("SymLoadModuleEx returned error : %d\n", error);
-		return SCAN_RESULT_SYMBOL_NOT_LOADED;
+		return;
 	}
-	bSymbolLoaded = true;
+	
 	if (!ShowSymbolInfo(dwLoadedAddr)) {
-		return SCAN_RESULT_SYMBOL_NOT_LOADED;
+		return;
 	}
 	//enumSymbols(dwLoadedAddr);
+	bSymbolLoaded = true;
 	#endif //  _WIN32
-
-	return SCAN_RESULT_SUCCESS;
 }
 
 #ifdef _WIN32 // will need DbgHelp
@@ -127,11 +132,14 @@ SCAN_RESULT CPDBSymbols::getSymbolFromAddress(PSYMBOLMAP pSymbolMap) {
 	return SCAN_RESULT_SUCCESS;
 }
 
-SCAN_RESULT CPDBSymbols::unloadSymbols() {
+void CPDBSymbols::unloadSymbols() {
 	#ifdef _WIN32 // will need DbgHelp
 
-	if (!bSymbolLoaded)
-		return SCAN_RESULT_SYMBOL_NOT_LOADED;
+	if (!bSymbolLoaded) {
+		std::cout << "Symbol needs to be loaded before unloading\n";
+		return;
+	}
+		
 
 	assert(hProcess != nullptr);
 	assert(dwLoadedAddr != 0);
@@ -140,11 +148,8 @@ SCAN_RESULT CPDBSymbols::unloadSymbols() {
 		// SymUnloadModule64 failed
 		DWORD error = GetLastError();
 		printf("SymUnloadModule64 returned error : %d\n", error);
-
 	}
 	#endif //  _WIN32
-
-	return SCAN_RESULT_SUCCESS;
 }
 
 bool CPDBSymbols::ShowSymbolInfo(DWORD64 ModBase)

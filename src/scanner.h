@@ -67,7 +67,7 @@ private:
 private:
 	std::shared_ptr<SignatureLoader> spSigLoader;
 	std::shared_ptr<IBinaryFile> spBinaryFile;
-	
+	std::shared_ptr<ISymbols> spSymbols;
 	size_t iCurrentOffset; // current scan offset of target binary file
 	uint64_t ullCodeSectionBase;
 	size_t iCodeSectionLength;

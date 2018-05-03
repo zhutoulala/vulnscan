@@ -22,17 +22,9 @@ WindowsBinary::WindowsBinary(std::string sFilePath){
 	bAnalyzed = false;
 }
 
-void WindowsBinary::addSymbols(std::string sSymbolPath) {
-	spSymbols = CSymbolsFactory::getSymbols(sSymbolPath);
-	assert(spSymbols != nullptr);
-
-	spSymbols->loadSymbols();
-}
-
 SCAN_RESULT WindowsBinary::analyze() {
 	if (bAnalyzed)
 		return SCAN_RESULT_SUCCESS;
-	addSymbols(sFilePath); // use self contained symbols
 	SCAN_RESULT sr = readStrings();
 	if (SCAN_FAILED(sr))
 		return sr;

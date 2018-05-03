@@ -14,10 +14,30 @@ typedef struct _SYMBOLMAP {
 
 class ISymbols {
 public:
+	/**
+	 * set current symbol file path
+	 */
 	virtual void setSymbolsPath(std::string sSymbolFile) = 0;
-	virtual SCAN_RESULT loadSymbols() = 0;
-	virtual SCAN_RESULT unloadSymbols() = 0;
+
+	/**
+	 * load symbols from current symbol file path
+	 */
+	virtual void loadSymbols() = 0;
+
+	/**
+	 * unload current symbols
+	 * this method has to be called before trying to load another symbol file
+	 */
+	virtual void unloadSymbols() = 0;
+
+	/**
+	 * get symbol from given address
+	 */
 	virtual SCAN_RESULT getSymbolFromAddress(PSYMBOLMAP pSymbolMap) = 0;
+	
+	/**
+	 * get symbol file loaded address
+	 */
 	virtual uint64_t getLoadedAddress() = 0;
 };
 
@@ -25,19 +45,19 @@ public:
 class CPDBSymbols : public ISymbols {
 
 public:
-	CPDBSymbols(std::string sSymbolFile);
+	CPDBSymbols();
 	~CPDBSymbols();
 public:
-	void setSymbolsPath(std::string sSymbolFile) {sSymbolPath = sSymbolFile;}
-	SCAN_RESULT loadSymbols();
-	SCAN_RESULT unloadSymbols();
+	void setSymbolsPath(std::string sSymbolFile) { sCurrentSymbol = sSymbolFile; };
+	void loadSymbols();
+	void unloadSymbols();
 	SCAN_RESULT getSymbolFromAddress(PSYMBOLMAP pSymbolMap);
 	SCAN_RESULT enumSymbols(DWORD64 ModBase);
 	bool ShowSymbolInfo(DWORD64 ModBase);
 	inline uint64_t getLoadedAddress() { return dwLoadedAddr; }
 
 private:
-	std::string sSymbolPath;
+	std::string sCurrentSymbol;
 	bool bSymbolLoaded;
 	HANDLE hProcess;
 	DWORD64 dwLoadedAddr;
@@ -46,13 +66,20 @@ private:
 
 class CSymbolsFactory {
 public:
-	static std::unique_ptr<ISymbols> getSymbols(std::string sSymbolFile) {
+	static std::shared_ptr<ISymbols> getSymbols(std::string sSymbolFile) {
 		/*std::string sExtension = ".pdb";
 		if (sSymbolFile.compare(sSymbolFile.length() - sExtension.length(),
 			sExtension.length(), sExtension) == 0) {
 			return std::make_unique<CPDBSymbols>(sSymbolFile);
 		}
 		return nullptr;*/
-		return std::make_unique<CPDBSymbols>(sSymbolFile);
+		if (g_spSymbols == nullptr) {
+			g_spSymbols = std::make_shared<CPDBSymbols>();
+		}
+		g_spSymbols->setSymbolsPath(sSymbolFile);
+		g_spSymbols->loadSymbols();
+		return g_spSymbols;
 	}
+private:
+	static std::shared_ptr<ISymbols> g_spSymbols;
 };

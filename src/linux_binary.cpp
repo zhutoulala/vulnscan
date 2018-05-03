@@ -1,12 +1,9 @@
 #include "binary_file.h"
 
 LinuxBinary::LinuxBinary(std::string sFilePath) {
-
+	this->sFilePath = sFilePath;
 }
 
-void LinuxBinary::addSymbols(std::string sSymbolPath) {
-
-}
 
 SCAN_RESULT LinuxBinary::analyze() {
 	return SCAN_RESULT_NOT_SUPPORT;

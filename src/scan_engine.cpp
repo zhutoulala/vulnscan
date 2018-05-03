@@ -60,6 +60,8 @@ bool CScanEngine::scanFile(std::string sTargetPath) {
 		return false;
 	}
 
+	std::cout << "Scanning ===> " << spBinaryFile->getFilePath() << std::endl;
+	std::cout << "......\n";
 	std::shared_ptr<IVulnReport> spVulnReport;
 
 	auto spStringScanner = CScannerFactory::getScanner(EStringScanner, spSigLoader, spBinaryFile);

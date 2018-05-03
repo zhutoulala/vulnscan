@@ -16,12 +16,17 @@ public:
 	 * The default symbol info from binary will be used if this is not called.
 	 * @param sSymbolPath[in] - the path to addtional symbol file
 	 */
-	virtual void addSymbols(std::string sSymbolPath) = 0;
+	//virtual void addSymbols(std::string sSymbolPath) = 0;
 
 	/**
 	 * Start analyzing the target binary file. This method needs to be called before rest methods
 	 */
 	virtual SCAN_RESULT analyze() = 0;
+
+	/**
+	 * get binary file path
+	 */
+	virtual std::string getFilePath() = 0;
 
 	/**
 	 * Get the base address of the code section
@@ -58,7 +63,7 @@ public:
 	/**
 	 * Get the symbol information for currect binary file
 	 */
-	virtual std::shared_ptr<ISymbols> getSymbols() = 0;
+	//virtual std::shared_ptr<ISymbols> getSymbols() = 0;
 
 	/**
 	 * Check if the binary file 64-bit
@@ -73,9 +78,11 @@ public:
 	WindowsBinary(std::string sFilePath);
 
 public:
-	void addSymbols(std::string sSymbolPath);
-
 	SCAN_RESULT analyze();
+
+	inline std::string getFilePath() {
+		return sFilePath;
+	}
 
 	uint64_t getCodeSectionBase();
 	size_t getCodeSectionSize();
@@ -88,8 +95,6 @@ public:
 	inline const std::vector<std::string>& getStrings() {
 		return vStrings;
 	}
-
-	inline std::shared_ptr<ISymbols> getSymbols() { return spSymbols; }
 
 	inline bool is64bit() {
 		return codeSectionBase > 0xffffffff;
@@ -115,7 +120,6 @@ private:
 	std::string sFilePath;
 	std::vector<uint8_t> vCode;
 	std::vector<std::string> vStrings;
-	std::shared_ptr<ISymbols> spSymbols;
 };
 
 
@@ -124,10 +128,12 @@ public:
 	LinuxBinary(std::string sFilePath);
 
 public:
-	void addSymbols(std::string sSymbolPath);
 
 	SCAN_RESULT analyze();
 
+	inline std::string getFilePath() {
+		return sFilePath;
+	}
 	uint64_t getCodeSectionBase();
 	size_t getCodeSectionSize();
 
@@ -142,15 +148,14 @@ public:
 		return vStrings;
 	}
 
-	inline std::shared_ptr<ISymbols> getSymbols() { return spSymbols; }
 	bool is64bit() { return false; }
 
 private:
 	SCAN_RESULT readStrings();
 
 private:
-	std::shared_ptr<ISymbols> spSymbols;
 	std::vector<std::string> vStrings;
+	std::string sFilePath;
 };
 
 

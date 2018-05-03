@@ -6,6 +6,8 @@ CASMScanner::CASMScanner(std::shared_ptr<SignatureLoader> spSigLoader,
 	: spSigLoader(spSigLoader), iCurrentOffset(0){
 	assert(spBinaryFile != nullptr);
 	this->spBinaryFile = spBinaryFile;
+	spSymbols = CSymbolsFactory::getSymbols(spBinaryFile->getFilePath());
+
 	ullCodeSectionBase = spBinaryFile->getCodeSectionBase();
 	iCodeSectionLength = spBinaryFile->getCodeSectionSize();
 
@@ -111,7 +113,7 @@ bool CASMScanner::getFunctionEnding(const std::string sFunction) {
 bool CASMScanner::getSymbolAtAddress(uint64_t ullAddress, std::string& sSymbol) {
 	SYMBOLMAP symbolMap;
 	symbolMap.iAddress = ullAddress;
-	if (SCAN_FAILED(spBinaryFile->getSymbols()->getSymbolFromAddress(&symbolMap))) {
+	if (SCAN_FAILED(spSymbols->getSymbolFromAddress(&symbolMap))) {
 		return false;
 	}
 	sSymbol = symbolMap.sName;
