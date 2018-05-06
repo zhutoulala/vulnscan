@@ -1,4 +1,6 @@
 #include "signature.h" 
+#include "config.h"
+#include "http_downloader.h"
 #include <fstream>
 #include <sstream>
 #include <iterator>
@@ -82,19 +84,21 @@ bool CSignature::isSubSet(const std::vector<T>& v1,
 	return true;
 }
 
-bool SignatureLoader::load(std::string sSigsFilePath) {
-	std::ifstream in(sSigsFilePath);
-
-	if (in) {
-		loadSigs(in);
-		in.close();
-		return true;
-	}	
-	return false;
+bool SignatureLoader::load() {
+	return download() & loadSigs();
 }
 
-void SignatureLoader::loadSigs(std::istream & in)
+bool SignatureLoader::download() {
+	HTTPDownloader downloader;
+	sSigContent = downloader.download(SIGNATURE_DOWNLOAD_LINK);
+	return sSigContent.empty();
+}
+
+bool SignatureLoader::loadSigs()
 {
+	if (sSigContent.empty())
+		return false;
+	std::istringstream in(sSigContent);
 	std::string sLine;
 	while (std::getline(in, sLine)) {
 		if (sLine.compare(0, 3, "CVE-")) {
@@ -149,4 +153,5 @@ void SignatureLoader::loadSigs(std::istream & in)
 
 		}
 	}
+	return true;
 }

@@ -99,7 +99,7 @@ public:
 	SignatureLoader() {};
 
 public:
-	bool load(std::string sSigsFilePath);
+	bool load();
 	inline size_t getSize() {
 		return vspSignatures.size();
 	}
@@ -110,8 +110,10 @@ public:
 
 private:
 	FRIEND_TEST(SignatureLoader, loadSigs);
-	void loadSigs(std::istream& in);
+	bool loadSigs();
+	bool download();
 
 private:
 	std::vector<std::shared_ptr<CSignature>> vspSignatures;
+	std::string sSigContent;
 };

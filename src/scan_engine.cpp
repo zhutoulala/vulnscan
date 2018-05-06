@@ -14,7 +14,7 @@ CScanEngine::CScanEngine() {
 
 
 bool CScanEngine::LoadSignatures() {
-	if (!bSigLoaded && !spSigLoader->load("vulnscan.sigs")) {
+	if (!bSigLoaded && !spSigLoader->load()) {
 		return false;
 	}
 	bSigLoaded = true;

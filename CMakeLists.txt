@@ -35,6 +35,24 @@ add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src"
 include_directories(
     ${CMAKE_BINARY_DIR}/googletest-src/googletest/include
 )
+
+##########################################################################	
+# Download and unpack curl at configure time
+#########################################################################
+configure_file(dependencies/CMakeLists.curl.txt curl-download/CMakeLists.txt)
+execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/curl-download" )
+execute_process(COMMAND "${CMAKE_COMMAND}" --build .
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/curl-download" )
+
+# Add curl directly to our build. This adds
+# the following targets: curl
+add_subdirectory("${CMAKE_BINARY_DIR}/curl-src"
+                 "${CMAKE_BINARY_DIR}/curl-build")
+
+include_directories(
+    ${CMAKE_BINARY_DIR}/curl-src/include
+)
 				 
 #########################################################################
 # Download and unpack capstone at configure time
@@ -108,10 +126,12 @@ add_executable(
 	src/asm_scanner.cpp
 	src/string_scanner.cpp
 	src/scan_engine.cpp
+	src/http_downloader.cpp
     )
 
 target_link_libraries(
     ${PROJECT_NAME}
+    libcurl
     capstone-static
 	pe-parser-library
 	strings2
@@ -130,6 +150,7 @@ add_executable(
 	src/string_scanner.cpp
 	src/asm_scanner.cpp
 	src/scan_engine.cpp
+	src/http_downloader.cpp
 	test/main.cpp	
 	test/test_windows_binary.cpp
 	test/test_file_typer.cpp
@@ -142,6 +163,7 @@ add_executable(
 target_link_libraries(
 	unit_tests
 	gtest
+	libcurl
 	capstone-static
 	pe-parser-library
 	strings2
