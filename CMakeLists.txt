@@ -40,7 +40,7 @@ include_directories(
 # Download and unpack curl at configure time
 #########################################################################
 configure_file(dependencies/CMakeLists.curl.txt curl-download/CMakeLists.txt)
-execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .
+execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}"  .
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/curl-download" )
 execute_process(COMMAND "${CMAKE_COMMAND}" --build .
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/curl-download" )

@@ -7,24 +7,14 @@ namespace fs = std::experimental::filesystem;
 
 CScanEngine::CScanEngine() {
 	spSigLoader = std::make_shared<SignatureLoader>();
-	bSigLoaded = false; // wait till scanning to load signatures
 	vScanList = std::vector<std::string>();
 	mSucceedScans = std::map<std::string, std::shared_ptr<IVulnReport>>();
 }
 
-
-bool CScanEngine::LoadSignatures() {
-	if (!bSigLoaded && !spSigLoader->load()) {
-		return false;
-	}
-	bSigLoaded = true;
-	return bSigLoaded;
-}
-
 bool CScanEngine::scanPath(std::string sTargetPath) {
 
-	if (!LoadSignatures()) {
-		std::cout << "Failed to load signatures. " << std::endl;
+	if (!spSigLoader->load()) {
+		std::cout << "Failed to load signatures. Is Internet connected?" << std::endl;
 		return false;
 	}
 

@@ -43,17 +43,9 @@ public:
 	 * collect files need to be scan
 	 */
 	void collectFile(std::string sTargetPath);
-private:
-	/**
-	* load precompiled vulnerability signatures
-	*
-	* @return true if succeed
-	*/
-	bool LoadSignatures();
 
 private:
 	std::shared_ptr<SignatureLoader> spSigLoader;
-	bool bSigLoaded;
 	std::vector<std::string> vScanList;
 	std::map<std::string, std::shared_ptr<IVulnReport>> mSucceedScans;
 };

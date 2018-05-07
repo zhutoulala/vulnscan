@@ -91,7 +91,7 @@ bool SignatureLoader::load() {
 bool SignatureLoader::download() {
 	HTTPDownloader downloader;
 	sSigContent = downloader.download(SIGNATURE_DOWNLOAD_LINK);
-	return sSigContent.empty();
+	return !sSigContent.empty();
 }
 
 bool SignatureLoader::loadSigs()

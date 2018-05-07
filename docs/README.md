@@ -34,7 +34,6 @@ cmake ..
 Then build the solution vulnscan.sln
 
 ## How to run this tool
-copy data/vulnscan.sigs into the same folder as vulnscan, then run either below command
 ```
 vulnscan [path to target binary file]
 vulnscan [path to target folder]
