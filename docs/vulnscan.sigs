@@ -3,6 +3,12 @@ STRING:
 + expected localhost or 127.0.0.1 or none
 ASM:
 - parseurlandfillconn: strlen strlen strlen curl_strnequal Curl_failf curl_strnequal curl_strnequal Curl_failf Curl_cmalloc
+
+CVE-2017-8816
+STRING:
++ NTLM handshake failure (bad type-2 message)
+ASM:
+- Curl_ntlm_core_mk_ntlmv2_hash: Curl_cmalloc
     
 CVE-2017-1000100
 STRING:

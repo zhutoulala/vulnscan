@@ -12,7 +12,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 endif()
 
-
 ##########################################################################	
 # Download and unpack googletest at configure time
 #########################################################################
@@ -44,6 +43,8 @@ execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}"  .
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/curl-download" )
 execute_process(COMMAND "${CMAKE_COMMAND}" --build .
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/curl-download" )
+add_definitions(-DCURL_STATICLIB)
+set(CURL_STATICLIB ON CACHE BOOL "" FORCE)
 
 # Add curl directly to our build. This adds
 # the following targets: curl
@@ -105,12 +106,11 @@ include_directories(
 
 #########################################################################
 # Build main project				 
-#########################################################################				 
+#########################################################################
+
 include_directories(
     ${PROJECT_SOURCE_DIR}/src
     )
-	
-
 
 add_executable(
     ${PROJECT_NAME}
