@@ -34,8 +34,9 @@ SCAN_RESULT CASMScanner::scan(std::shared_ptr<IVulnReport>& spVulnReport) {
 			if (spSignature->getFunctionName() == sFunction) {
 				std::vector<std::string> sCallSequence;
 				if (getCallSequence(sFunction, sCallSequence)) {
-					spVulnReport->addDetection(spSignature->getCVE(), 
-						spSignature->callSequenceMatch(sCallSequence));
+					DETECTION_STATUS status = spSignature->callSequenceMatch(sCallSequence);
+					if (status != DETECTION_NOMATCH)
+						spVulnReport->addDetection(spSignature->getCVE(), status);
 				}
 			}
 		}
