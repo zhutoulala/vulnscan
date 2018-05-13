@@ -15,8 +15,8 @@ std::string CVulnReport::toString() {
 	std::string sReport = "Found vulnerability: \n\n";
 	for (auto it : vspVulnerablities) {
 		sReport += it->getCVE();
-		sReport += " (confidence: " + std::to_string(it->getConfidenceLevel());
-		sReport += ")\n";
+		sReport += it->getConfidenceLevel();
+		sReport += "\n";
 	}
 	return sReport;
 }

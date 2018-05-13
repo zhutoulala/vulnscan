@@ -12,18 +12,15 @@
 #include <iostream>
 #include <memory>
 
-void printUsage() {
+void printInfo() {
 	std::cout << "vulnscan (v0.1) - A static binary vulnerability scanner" << std::endl;
-	std::cout << "Visit http://vulnscan.us/ for more details" << std::endl;
-	std::cout << "Usage: vulnscan [target path]\n";
+	std::cout << "Visit http://vulnscan.us/ for more details" << std::endl;	
 }
 
-
 int main(int argc, char **argv) {
-
-	printUsage();
+	printInfo();
 	if (argc < 2) {
-		return -1;
+		std::cout << "Usage: vulnscan [target path]\n";
 	}
 
 	auto spScanEngine = CScanEngineFactory::getScanEgnine();

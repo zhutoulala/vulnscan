@@ -39,14 +39,21 @@ typedef uint32_t DETECTION_STATUS;
 #define DETECTION_POSITIVE_MATCH 0x00000100
 #define DETECTION_NEGATIVE_MATCH 0x00001000
 
+static std::string detectionToConfidence(DETECTION_STATUS status) {
+	if ((DETECTION_ASM_MATCH & status) &&
+		(DETECTION_STRING_MATCH & status) &&
+		(DETECTION_POSITIVE_MATCH & status))
 
-typedef uint8_t DETECTION_CONFIDENCE;
+		return " (confidence : high)";
 
-static DETECTION_CONFIDENCE detectionToConfidence(DETECTION_STATUS status) {
-	DETECTION_CONFIDENCE confident = 0;
-	while (status) {
-		if (status & 0x00000001) confident++;
-		status = status >> 1;
-	}
-	return confident;
+	if ((DETECTION_STRING_MATCH & status) && 
+		(DETECTION_POSITIVE_MATCH & status))
+		return " (confidence : median)";
+
+	if ((DETECTION_ASM_MATCH & status) && 
+		(DETECTION_POSITIVE_MATCH & status))
+		return " (confidence : low)";
+
+	if (DETECTION_NEGATIVE_MATCH & status)
+		return " (patched, no worry)"; 
 }
