@@ -16,3 +16,19 @@ STRING:
 + Disk full or allocation exceeded
 + tftp_rx: giving up waiting for block
 - TFTP file name too long
+
+CVE-2018-1000120
+ASM:
++ Curl_ftp_done: curl_unescape
++ ftp_parse_url_path: curl_unescape
+
+CVE-2018-1000121
+STRING:
++ LDAP local: bind ldap_parse_result
++ LDAP local: ldap_search_ext
+ASM:
+- ldap_recv: ldap_get_attribute_ber ldap_get_attribute_ber
+
+CVE-2018-1000122
+STRING:
++ RTSP CSeq mismatch or invalid CSeq
