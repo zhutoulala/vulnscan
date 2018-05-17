@@ -11,6 +11,12 @@ CScanEngine::CScanEngine() {
 	mSucceedScans = std::map<std::string, std::shared_ptr<IVulnReport>>();
 }
 
+CScanEngine::CScanEngine(std::shared_ptr<IScanner> spASMScanner, 
+	std::shared_ptr<IScanner> spStringScanner) : CScanEngine(){
+	this->spASMScanner = spASMScanner;
+	this->spStringScanner = spStringScanner;
+}
+
 bool CScanEngine::scanPath(std::string sTargetPath) {
 
 	if (!spSigLoader->load()) {
@@ -54,7 +60,8 @@ bool CScanEngine::scanFile(std::string sTargetPath) {
 	std::cout << "......\n";
 	std::shared_ptr<IVulnReport> spVulnReport;
 
-	auto spStringScanner = CScannerFactory::getScanner(EStringScanner, spSigLoader, spBinaryFile);
+	if (spStringScanner == nullptr)
+		spStringScanner = CScannerFactory::getScanner(EStringScanner, spSigLoader, spBinaryFile);
 	
 	sr = spStringScanner->scan(spVulnReport);
 	if (SCAN_FAILED(sr)) {
@@ -62,7 +69,8 @@ bool CScanEngine::scanFile(std::string sTargetPath) {
 		return false;
 	}
 
-	auto spASMScanner = CScannerFactory::getScanner(EASMScanner, spSigLoader, spBinaryFile);
+	if (spASMScanner == nullptr)
+		spASMScanner = CScannerFactory::getScanner(EASMScanner, spSigLoader, spBinaryFile);
 	sr = spASMScanner->scan(spVulnReport);
 	if (SCAN_FAILED(sr)) {
 		std::cout << spASMScanner->getType() << " failed to scan: " << scanResultToString(sr) << std::endl;

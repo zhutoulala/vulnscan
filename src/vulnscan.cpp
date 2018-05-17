@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
 	printInfo();
 	if (argc < 2) {
 		std::cout << "Usage: vulnscan [target path]\n";
+		return -1;
 	}
 
 	auto spScanEngine = CScanEngineFactory::getScanEgnine();

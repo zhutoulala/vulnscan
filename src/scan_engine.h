@@ -31,6 +31,8 @@ class CScanEngine : public IScanEngine {
 	
 public:
 	CScanEngine();
+	CScanEngine(std::shared_ptr<IScanner> spASMScanner, std::shared_ptr<IScanner> spStringScanner);
+
 public:
 	bool scanPath(std::string sTargetPath);
 	bool scanFile(std::string sTargetPath);
@@ -48,6 +50,9 @@ private:
 	std::shared_ptr<SignatureLoader> spSigLoader;
 	std::vector<std::string> vScanList;
 	std::map<std::string, std::shared_ptr<IVulnReport>> mSucceedScans;
+
+	std::shared_ptr<IScanner> spASMScanner;
+	std::shared_ptr<IScanner> spStringScanner;
 };
 
 

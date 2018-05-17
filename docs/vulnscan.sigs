@@ -461,3 +461,7 @@ ASM:
 CVE-2018-1000122
 STRING:
 + RTSP CSeq mismatch or invalid CSeq
+
+CVE-2018-1000300
+STRING:
+- cached response data too big to handle

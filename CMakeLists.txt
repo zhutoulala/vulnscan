@@ -33,6 +33,7 @@ add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src"
 
 include_directories(
     ${CMAKE_BINARY_DIR}/googletest-src/googletest/include
+	${CMAKE_BINARY_DIR}/googletest-src/googlemock/include
 )
 
 ##########################################################################	
@@ -163,6 +164,7 @@ add_executable(
 target_link_libraries(
 	unit_tests
 	gtest
+	gmock
 	libcurl
 	capstone-static
 	pe-parser-library
