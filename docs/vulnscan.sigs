@@ -1,3 +1,432 @@
+CVE-2010-5327
+STRING:
+- This method must have at least one argument as the name of 
+- the class to instantiate
+- template for security reasons
+
+
+CVE-2011-1019
+STRING:
+- Loading kernel module for a network device 
+- with CAP_SYS_MODULE (deprecated).  Use CAP_NET_ADMIN and alias netdev
+
+
+CVE-2011-1021
+STRING:
+- Allow ACPI methods to be inserted/replaced at run time
+
+
+CVE-2011-1476
+STRING:
++ MIDI Error: Invalid patch format (key)
++ MIDI Error: Patch header too short
++ MIDI Warning: Sysex record too short
+
+
+CVE-2011-1833
+STRING:
+- Mount of device (uid: 
+- not owned by requested user (uid: 
+
+
+CVE-2011-3178
+STRING:
+- Invalid scheduler type, check mkdiststats docu - aehm, source
+
+CVE-2012-1836
+STRING:
+- DN label decompression header is bogus
+- DN label decompression is impossible -- malformed/hostile packet?
+- rr.rdlength is larger than 16 bytes for an ipv6 entry -- malformed/hostile packet?
+- rr.rdlength is larger than 4 bytes for an ipv4 entry -- malformed/hostile packet?
+- don't know how to handle undefined type (
+
+CVE-2012-2139
+STRING:
+- should use the base name of the file name to prevent file system traversal
+
+CVE-2012-2140
+STRING:
+- should send an email using exim
+- should send an email with a return-path using exim
+- Can't set the return-path
+- should use the sender address is no return path is specified
+- should use the from address is no return path or sender are specified
+- should escape the return path address
+- should still send an email if the settings have been set to nil
+- should escape evil haxxor attemptes
+
+CVE-2012-2395
+STRING:
+- no power type set for system
++ Power management is not enabled for this system
++ Invalid power management type for this system
+
+CVE-2012-3400
+STRING:
+- error loading logical volume descriptor: 
+- Invalid packet length 
+- Too many sparing tables 
+
+
+CVE-2012-3412
+STRING:
++ TX and RX queues cannot be smaller than
+- RX queues cannot be smaller than
+- increasing TX queue size to minimum of
+
+CVE-2012-4520
+STRING:
+- If the reset view is marked as being for admin, the HTTP_HOST header is used for a domain override.
+- Poisoned HTTP_HOST headers can't be used for reset emails
+- Poisoned HTTP_HOST headers can't be used for reset emails on admin views
+
+
+CVE-2012-6697
+STRING:
+- Invalid decompression pointer
+
+CVE-2013-1770
+STRING:
++ You do not have access to view views.
++ No graphs defined for this view. Please add some
+
+CVE-2013-2021
+STRING:
+- pdf_extract_obj: obj 
+- cli_pdf: R value out of range
+- cli_pdf: R value outside supported range [2..5]
+
+CVE-2013-4136
+STRING:
+- Server instance directory
+- Cannot create server instance directory
+
+CVE-2013-4492
+STRING:
+- MissingTranslationData html_message html escapes key names
+
+CVE-2013-6370
+STRING:
+- a-=c; a^=rot(c,k); c+=b;
+- racy random seed initializtion if used by multiple threads
+- error CryptAcquireContextW
+
+CVE-2013-7225
+STRING:
++ should not display completed tasks
+- should collapse all comments and emails on a specific contact
+- should expand all comments and emails on a specific contact
+- should not do anything when state neither Expanded nor Collapsed
+- should collapse all comments and emails on Contact
+- should not allow an arbitary state (sanitizes input)
+- should not update an arbitary model (sanitizes input)
+
+CVE-2013-7441
+STRING:
+- Failed to accept socket connection: %m
+- Spawned a child process
+- Failed to spawn a child process
+- Modern initial negotiation failed
+- Failed to get socket flags
+- Failed to set socket to blocking mode
+- Failed to set peername
+
+CVE-2013-7459
+STRING:
+- ECB mode does not use IV
+- CTR mode needs counter parameter, not IV
+
+
+CVE-2014-0237
+STRING:
++ Unpack summary info loop limit
+
+
+CVE-2014-0238
+STRING:
+- CDF_VECTOR with nelements == 0
+
+CVE-2014-2208
+STRING:
++ Light Process failed chdir to %s.
++ LightProcess got invalid command: %.20s
++ Failed to send command proc_open
+
+
+CVE-2014-2567
+STRING:
+- Configuration requires sending STARTTLS, but the IMAP server greets us with PREAUTH. 
+- Encryption cannot be established. If this configuration worked previously, someone 
+- is after your data and they are pretty smart.
+- * PREAUTH hi there\r\n
+
+CVE-2014-5472
+STRING:
+- ISOFS: Recursive directory relocation 
+- ISOFS: Directory relocation points to 
+
+CVE-2014-8122
+STRING:
+- Invalid state detected after 
+
+CVE-2014-9620
+STRING:
+- elf_notes   256 max ELF notes processed
+
+CVE-2014-9721
+STRING:
+- Received unauthenticated message: 
+
+CVE-2015-1335
+STRING:
+- Out of memory checking for symbolic link
+- this is a relative bind mount
+
+CVE-2015-2304
+STRING:
+- Extracting an absolute path should fail here.
+
+CVE-2015-2311
+STRING:
+- Text blob missing NUL terminator.
+
+CVE-2015-2312
+STRING:
+- Message contains amplified list pointer.
+
+CVE-2015-2922
+STRING:
+- RA: Got route advertisement with lower hop_limit than current
+
+CVE-2015-3220
+STRING:
+- No data left after decryption and IV removal
+
+
+CVE-2015-4054 (1)
+STRING:
+- Password packet before auth packet?
+
+
+CVE-2015-4054
+STRING:
+- client password pkt before startup packet
+
+CVE-2015-7566
+STRING:
+- missing bulk out endpoints\n
+
+
+CVE-2015-8013
+STRING:
+- GNU s2k type not supported.
+
+
+CVE-2015-8747
+STRING:
+- Can't tranlate name safely to filesystem, 
+- skipping component: %s
+
+
+CVE-2015-8896
+STRING:
+- DPC HDRI Cipher OpenMP
+
+CVE-2016-10248
+STRING:
+- warning: forcing negative ROI shift to zero 
+- (bitstream is probably corrupt)\n
+
+CVE-2016-2385
+STRING:
+- not enough space to encode sip message\n
+
+
+CVE-2016-3136
+STRING:
+- expected endpoint missing\n
+
+CVE-2016-3140
+STRING:
+- OOB endpoints missing\n
+- bulk-in endpoint missing\n
+- bulk-out endpoint missing\n
+
+
+CVE-2016-3178
+STRING:
+- Response received %d bytes\n
+
+
+CVE-2016-3728
+STRING:
+- Unrecognized pxeboot config type: Server
+
+
+CVE-2016-4302
+STRING:
+- Invalid zero dictionary size
+
+
+CVE-2016-4414
+STRING:
+- Received invalid handshake data from client
+
+CVE-2016-4809
+STRING:
+- Rejecting malformed cpio archive: symlink contents exceed 1 megabyte
+
+CVE-2016-5009
+STRING:
+- command prefix not found
+- command prefix must not be empty
+- command requires a prefix to be valid
+
+CVE-2016-6873
+STRING:
+- compact(): recursion detected
+
+
+CVE-2016-6912
+STRING:
++ Paletter image not supported by webp
+- Palette image not supported by webp
+
+
+CVE-2016-7115
+STRING:
+- Invalid salt length: %d (instead of 16) received from server %s\n
+
+
+CVE-2016-8339
+STRING:
++ Unrecognized client limit class
+- Unrecognized client limit class: the user specified 
+- an invalid one, or 'master' which has no buffer limits.
+
+
+CVE-2016-9123
+STRING:
+- ECDH-ES output size too large, must be less than 1<<16
+
+
+CVE-2016-9317
+STRING:
+- product of memory allocation multiplication would exceed INT_MAX, failing operation gracefully
+
+CVE-2017-0896
+STRING:
+- Must be a realm administrator
+
+CVE-2017-0900
+STRING:
+- max_length must be positive
+- Truncating desc to 2 characters:\nab
+
+
+CVE-2017-0903
+STRING:
+- YAML safe loading is not available. Please upgrade psych to a version that supports safe loading (>= 2.0).
+
+
+CVE-2017-1000198
+STRING:
++ tcmu_create_glfs_object failed\n
++ glfs_access file not present, or not writable
+
+CVE-2017-13053
+STRING:
+-  field inside this NLRI 
+
+
+CVE-2017-15102
+STRING:
++ Not able to get a minor for this device.\n
++ LEGO USB Tower #%d now attached to major 
+- Not able to get a minor for this device.\n
+- LEGO USB Tower #%d now attached to major 
+
+
+CVE-2017-15385
+STRING:
+- Warning: Invalid vd_next in the ELF version\n
+
+CVE-2017-16529
+STRING:
+- invalid control header\n
+- too short v1 buffer descriptor\n
+- invalid buffer length (v1)\n
+
+
+CVE-2017-16533
+STRING:
+- hid descriptor is too short\n
+
+
+CVE-2017-16534
+STRING:
+- invalid descriptor buffer length\n
+
+CVE-2017-16645
+STRING:
+- Too large descriptor\n
+- Union descriptor to short (%d vs %zd\n)
+
+CVE-2017-2298
+STRING:
+- Identity returned by server would result in directory traversal. Not writing key to disk.
+
+
+CVE-2017-2599
+STRING:
++ rename as an overwrite should have failed
+-  worked as expected on a nonexistent target
+-  was not supposed to work against 
+- CLI command failed with status 
+
+
+CVE-2017-5225
+STRING:
+- Error, can only handle BitsPerSample=8 in %s
+
+
+CVE-2017-5345
+STRING:
+- blog-post magazine col-md-12 clearfix
+
+
+CVE-2017-5545
+STRING:
+- ERROR: Input file is too small to contain valid plist data.\n
+
+
+CVE-2017-5581
+STRING:
+- Destination rect %dx%d at %d,%d exceeds framebuffer %dx%d
+
+CVE-2017-6199
+STRING:
+- invalid e-mail address
+
+CVE-2017-6420
+STRING:
+- WWPack: unpack memory address out of bounds.\n
+
+
+CVE-2017-6430
+STRING:
++ Cannot write output file (%s)
+- Cannot write output file (%s): the filter is not correctly handled.
+- Cannot write output file (%s): the filter format is not correct. 
+
+
+CVE-2017-7524
+STRING:
+- Algorithm not supported for hmac:
+- HMAC Update failed:
+- HMAC Final failed:
+
 CVE-2017-9502
 STRING:
 + expected localhost or 127.0.0.1 or none
