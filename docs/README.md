@@ -8,13 +8,48 @@ Windows executables: `exe dll`
 Linux executables: `elf`
 
 ## Download
-Download vulnscan version 0.1 from [here](vulnscan.exe)
+Download vulnscan version 0.1 from [here](https://github.com/zhutoulala/vulnscan/releases/download/0.1/vulnscan.exe)
 
 ## How to run this tool
 ```
 vulnscan [path to target binary file]
 vulnscan [path to target folder]
 ```
+The output would be like:
+```
+C:\Users\peter\github\vulnscan\build\Release>vulnscan.exe vulnscan.exe
+vulnscan (v0.1) - A static binary vulnerability scanner
+Visit http://vulnscan.us/ for more details
+Scanning ===> vulnscan.exe
+......
+No symbols available for the module.
+Image name: vulnscan.exe
+Loaded image name: C:\Users\peter\github\vulnscan\build\Release\vulnscan.exe
+Line numbers: Not available
+Global symbols: Not available
+Type information: Not available
+Source indexing: No
+Public symbols: Not available
+No more code to scan
+Couldn't get next function
+
+
+==================================================
+Scan Summary
+--------------------------------------------------
+Total to scan:  1
+Successfully scanned:   1
+Vulnerability found:    1
+--------------------------------------------------
+Detailed Report
+--------------------------------------------------
+vulnscan.exe - Found vulnerability:
+
+CVE-2018-1000122 (confidence : median)
+
+==================================================
+```
+
 
 ## How does it work
 vulnscan is consisted of 2 types of scan engine, the string scanner and disassembly scanner. 
