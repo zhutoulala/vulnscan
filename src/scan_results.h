@@ -56,4 +56,5 @@ static std::string detectionToConfidence(DETECTION_STATUS status) {
 
 	if (DETECTION_NEGATIVE_MATCH & status)
 		return " (patched, no worry)"; 
+	return "";
 }
