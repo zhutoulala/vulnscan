@@ -28,8 +28,8 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 # Add googletest directly to our build. This adds
 # the following targets: gtest, gtest_main, gmock
 # and gmock_main
-add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src"
-                 "${CMAKE_BINARY_DIR}/googletest-build")
+add_subdirectory("${CMAKE_BINARY_DIR}/googletest-src" EXCLUDE_FROM_ALL
+                 "${CMAKE_BINARY_DIR}/googletest-build" EXCLUDE_FROM_ALL)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/googletest-src/googletest/include
@@ -49,8 +49,8 @@ set(CURL_STATICLIB ON CACHE BOOL "" FORCE)
 
 # Add curl directly to our build. This adds
 # the following targets: curl
-add_subdirectory("${CMAKE_BINARY_DIR}/curl-src"
-                 "${CMAKE_BINARY_DIR}/curl-build")
+add_subdirectory("${CMAKE_BINARY_DIR}/curl-src" EXCLUDE_FROM_ALL 
+                 "${CMAKE_BINARY_DIR}/curl-build" EXCLUDE_FROM_ALL)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/curl-src/include
@@ -68,8 +68,8 @@ execute_process(COMMAND "${CMAKE_COMMAND}" --build .
 
 # Add capstone directly to our build. This adds
 # the following targets: capstone
-add_subdirectory("${CMAKE_BINARY_DIR}/capstone-src"
-                 "${CMAKE_BINARY_DIR}/capstone-build")
+add_subdirectory("${CMAKE_BINARY_DIR}/capstone-src" EXCLUDE_FROM_ALL
+                 "${CMAKE_BINARY_DIR}/capstone-build" EXCLUDE_FROM_ALL)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/capstone-src/include
@@ -86,8 +86,8 @@ execute_process(COMMAND "${CMAKE_COMMAND}" --build .
 
 # Add pe-parse directly to our build. This adds
 # the following targets: pe-parse
-add_subdirectory("${CMAKE_BINARY_DIR}/pe-parse-src"
-                 "${CMAKE_BINARY_DIR}/pe-parse-build")
+add_subdirectory("${CMAKE_BINARY_DIR}/pe-parse-src" EXCLUDE_FROM_ALL
+                 "${CMAKE_BINARY_DIR}/pe-parse-build" EXCLUDE_FROM_ALL)
 
 include_directories(
     ${CMAKE_BINARY_DIR}/pe-parse-src/pe-parser-library/include
