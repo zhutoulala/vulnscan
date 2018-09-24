@@ -128,6 +128,8 @@ add_executable(
 	src/string_scanner.cpp
 	src/scan_engine.cpp
 	src/http_downloader.cpp
+    src/scan_target.cpp
+    src/utils/thread_pool.cpp
     )
 
 target_link_libraries(

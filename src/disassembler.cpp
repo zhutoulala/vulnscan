@@ -1,5 +1,5 @@
 #include "disassembler.h"
-#include "capstone.h"
+#include "capstone\capstone.h"
 #include "binary_file.h"
 
 namespace Disassembler {

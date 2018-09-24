@@ -1,7 +1,7 @@
 #pragma once
 
 #include "scan_results.h"
-#include "capstone.h"
+#include "capstone\capstone.h"
 
 #include <vector>
 

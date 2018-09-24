@@ -3,7 +3,9 @@
 #include "binary_file.h"
 #include "scanner.h"
 #include "vuln_report.h"
+#include "utils\thread_pool.h"
 #include <map>
+#include <mutex>
 
 class IScanEngine {
 public:
@@ -12,13 +14,6 @@ public:
 	 * scan target path, could be a folder or file
 	 */
 	virtual bool scanPath(std::string sTargetPath) = 0;
-
-	/**
-	 * start the target binary file
-	 * @param[in] sTargetPath - path to target file
-	 * @return true if succeed
-	 */
-	virtual bool scanFile(std::string sTargetPath) = 0;
 
 	/**
 	 * print scan results
@@ -35,24 +30,19 @@ public:
 
 public:
 	bool scanPath(std::string sTargetPath);
-	bool scanFile(std::string sTargetPath);
+	void scanFile(std::string sTargetPath);
 	void printResults();
-	inline const std::vector<std::string>& getScanList() {
-		return vScanList;
-	}
 
-	/**
-	 * collect files need to be scan
-	 */
-	void collectFile(std::string sTargetPath);
 
 private:
+    std::mutex m_mutex;
 	std::shared_ptr<SignatureLoader> spSigLoader;
-	std::vector<std::string> vScanList;
 	std::map<std::string, std::shared_ptr<IVulnReport>> mSucceedScans;
+    std::vector<std::string> vFailedScans;
 
 	std::shared_ptr<IScanner> spASMScanner;
 	std::shared_ptr<IScanner> spStringScanner;
+    std::unique_ptr<CThreadPool> m_threadPool;
 };
 
 
