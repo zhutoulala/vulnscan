@@ -142,7 +142,6 @@ void CPDBSymbols::unloadSymbols() {
 		
 
 	assert(hProcess != nullptr);
-	assert(dwLoadedAddr != 0);
 	if (!SymUnloadModule64(hProcess, dwLoadedAddr))
 	{
 		// SymUnloadModule64 failed

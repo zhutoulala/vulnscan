@@ -39,9 +39,6 @@ private:
 	std::shared_ptr<SignatureLoader> spSigLoader;
 	std::map<std::string, std::shared_ptr<IVulnReport>> mSucceedScans;
     std::vector<std::string> vFailedScans;
-
-	std::shared_ptr<IScanner> spASMScanner;
-	std::shared_ptr<IScanner> spStringScanner;
     std::unique_ptr<CThreadPool> m_threadPool;
 };
 

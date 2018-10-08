@@ -9,7 +9,7 @@ CVulnReport::CVulnReport() {
 
 std::string CVulnReport::toString() {
 	if (vspVulnerablities.size() == 0) {
-		return "No vulnerability found";
+		return "No vulnerability found\n";
 	}
 	
 	std::string sReport = "Found vulnerability: \n\n";

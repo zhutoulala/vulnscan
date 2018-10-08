@@ -10,12 +10,6 @@ CScanEngine::CScanEngine() {
     m_threadPool = CThreadPoolFactory::getThreadPool();
 }
 
-CScanEngine::CScanEngine(std::shared_ptr<IScanner> spASMScanner, 
-	std::shared_ptr<IScanner> spStringScanner) : CScanEngine(){
-	this->spASMScanner = spASMScanner;
-	this->spStringScanner = spStringScanner;
-}
-
 bool CScanEngine::scanPath(std::string sTargetPath) {
     
 	if (!spSigLoader->load()) {
@@ -58,25 +52,23 @@ void CScanEngine::scanFile(std::string sTargetPath) {
 	std::cout << " ......\n";
 	std::shared_ptr<IVulnReport> spVulnReport;
 
-	if (spStringScanner != nullptr)
-		sr = spStringScanner->scan(spVulnReport);
-	else
-		sr = CScannerFactory::getScanner(EStringScanner, spSigLoader, spBinaryFile)->scan(spVulnReport);
-	
-	
+    auto spStringScanner = CScannerFactory::getScanner(EStringScanner, spSigLoader, spBinaryFile);
+    assert(spStringScanner != nullptr);
+    
+    sr = spStringScanner->scan(spVulnReport);
+
 	if (SCAN_FAILED(sr)) {
 		std::cout << spStringScanner->getType() << " failed to scan: " << scanResultToString(sr) << std::endl;
 		return;
 	}
 
-	if (spASMScanner != nullptr)
-		sr = spASMScanner->scan(spVulnReport);
-	else
-		sr = CScannerFactory::getScanner(EASMScanner, spSigLoader, spBinaryFile)->scan(spVulnReport);
+    /*auto spASMScanner = CScannerFactory::getScanner(EASMScanner, spSigLoader, spBinaryFile);
+    assert(spASMScanner != nullptr);
 	
+    sr = spASMScanner->scan(spVulnReport);
 	if (SCAN_FAILED(sr)) {
 		std::cout << spASMScanner->getType() << " failed to scan: " << scanResultToString(sr) << std::endl;
-	}
+	}*/
     else {
         std::lock_guard<std::mutex> lock{ m_mutex };
 	    mSucceedScans.insert(std::make_pair(sTargetPath, spVulnReport));

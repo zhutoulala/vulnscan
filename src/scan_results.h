@@ -11,6 +11,7 @@ typedef uint32_t SCAN_RESULT;
 #define SCAN_RESULT_NO_SIGS		0x0000000F
 #define SCAN_RESULT_SYMBOL_NOT_LOADED		0x00000010
 #define SCAN_RESULT_SYMBOL_NOT_FOUND		0x00000020
+#define SCAN_RESULT_OUT_OF_BUFFER           0x00000040
 
 #define SCAN_SUCCEED(x) (((SCAN_RESULT)(x)) == 0)
 #define SCAN_FAILED(x) (((SCAN_RESULT)(x)) > 0)
@@ -26,6 +27,7 @@ static std::string scanResultToString(SCAN_RESULT sr) {
 		case SCAN_RESULT_NO_SIGS:			return "Signatures are not loaded";
 		case SCAN_RESULT_SYMBOL_NOT_LOADED:			return "Symbols are not loaded";
 		case SCAN_RESULT_SYMBOL_NOT_FOUND:			return "Symbol could not be found for given address";
+        case SCAN_RESULT_OUT_OF_BUFFER:             return "Scan is running of out buffer memory";
 		default: return "Invalid scan result";
 	}
 }

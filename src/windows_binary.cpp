@@ -49,6 +49,9 @@ SCAN_RESULT WindowsBinary::getInstFromAddress(uint64_t ullAddress, size_t iLengt
 	assert(spInstSet == nullptr);
 
 	spInstSet = std::make_unique<Disassembler::InstructionSet>();
+    if (ullAddress - codeSectionBase > vCode.size()) {
+        return SCAN_RESULT_OUT_OF_BUFFER;
+    }
 	return Disassembler::Disassembly(vCode.data() + ullAddress - codeSectionBase, 
 		iLength, ullAddress, is64bit(), *spInstSet);
 }
