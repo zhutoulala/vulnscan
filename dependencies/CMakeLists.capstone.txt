@@ -5,7 +5,7 @@ project(capstone-download NONE)
 include(ExternalProject)
 ExternalProject_Add(capstone
     GIT_REPOSITORY https://github.com/aquynh/capstone.git
-    GIT_TAG master
+    GIT_TAG 4.0.1
     SOURCE_DIR ${CMAKE_BINARY_DIR}/capstone-src
     BINARY_DIR ${CMAKE_BINARY_DIR}/capstone-build
     CONFIGURE_COMMAND 

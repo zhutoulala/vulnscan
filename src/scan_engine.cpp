@@ -13,7 +13,7 @@ CScanEngine::CScanEngine() {
 bool CScanEngine::scanPath(std::string sTargetPath) {
     
 	if (!spSigLoader->load()) {
-		std::cout << "Failed to load signatures. Is Internet connected?" << std::endl;
+		std::cout << "Failed to load signatures. Does vulnscan.sigs exist?" << std::endl;
 		return false;
 	}
 

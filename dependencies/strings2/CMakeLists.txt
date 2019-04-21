@@ -22,7 +22,7 @@ include_directories(
 	
 
 add_library(
-    ${PROJECT_NAME}
+    ${PROJECT_NAME} STATIC
 	strings/print_buffer.cpp
 	strings/string_parser.cpp
     )

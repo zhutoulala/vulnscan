@@ -8,7 +8,7 @@ ExternalProject_Add(pe-parse
     GIT_TAG master
     SOURCE_DIR ${CMAKE_BINARY_DIR}/pe-parse-src
     BINARY_DIR ${CMAKE_BINARY_DIR}/pe-parse-build
-    CONFIGURE_COMMAND 
+    CONFIGURE_COMMAND
     BUILD_COMMAND 
     INSTALL_COMMAND 
     TEST_COMMAND 

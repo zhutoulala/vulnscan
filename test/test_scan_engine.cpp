@@ -11,12 +11,6 @@ public:
 	MOCK_METHOD0(getType, std::string());
 };
 
-TEST(CScanEngine, getScanList) {
-	CScanEngine engine;
-	engine.collectFile(".");
-	ASSERT_TRUE(engine.getScanList().size() > 0);
-}
-
 
 TEST(CScanEngine, scanFile) {
 	std::shared_ptr<IScanner> spMockScanner = std::make_shared<CMockScanner>();

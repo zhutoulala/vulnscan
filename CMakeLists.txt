@@ -35,27 +35,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/googletest-src/googletest/include
 	${CMAKE_BINARY_DIR}/googletest-src/googlemock/include
 )
-
-##########################################################################	
-# Download and unpack curl at configure time
-#########################################################################
-configure_file(dependencies/CMakeLists.curl.txt curl-download/CMakeLists.txt)
-execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}"  .
-    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/curl-download" )
-execute_process(COMMAND "${CMAKE_COMMAND}" --build .
-    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/curl-download" )
-add_definitions(-DCURL_STATICLIB)
-set(CURL_STATICLIB ON CACHE BOOL "" FORCE)
-
-# Add curl directly to our build. This adds
-# the following targets: curl
-add_subdirectory("${CMAKE_BINARY_DIR}/curl-src" EXCLUDE_FROM_ALL 
-                 "${CMAKE_BINARY_DIR}/curl-build" EXCLUDE_FROM_ALL)
-
-include_directories(
-    ${CMAKE_BINARY_DIR}/curl-src/include
-)
-				 
+ 
 #########################################################################
 # Download and unpack capstone at configure time
 #########################################################################
@@ -97,13 +77,11 @@ include_directories(
 # other dependencies
 #########################################################################
 
-add_subdirectory(dependencies/strings2)
+add_subdirectory(${PROJECT_SOURCE_DIR}/dependencies/strings2)
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/dependencies/strings2/strings
 )
-
-
 
 #########################################################################
 # Build main project				 
@@ -127,14 +105,12 @@ add_executable(
 	src/asm_scanner.cpp
 	src/string_scanner.cpp
 	src/scan_engine.cpp
-	src/http_downloader.cpp
     src/scan_target.cpp
     src/utils/thread_pool.cpp
     )
 
 target_link_libraries(
     ${PROJECT_NAME}
-    libcurl
     capstone-static
 	pe-parser-library
 	strings2
@@ -153,21 +129,20 @@ add_executable(
 	src/string_scanner.cpp
 	src/asm_scanner.cpp
 	src/scan_engine.cpp
-	src/http_downloader.cpp
+    src/scan_target.cpp
+    src/utils/thread_pool.cpp
 	test/main.cpp	
 	test/test_windows_binary.cpp
 	test/test_file_typer.cpp
 	test/test_disassembler.cpp
 	test/test_signature.cpp
 	test/test_vulnerability.cpp
-	test/test_scan_engine.cpp
     )
 
 target_link_libraries(
 	unit_tests
 	gtest
 	gmock
-	libcurl
 	capstone-static
 	pe-parser-library
 	strings2
@@ -178,3 +153,18 @@ include(CTest)
 enable_testing()
 
 add_test(unit ${PROJECT_BINARY_DIR}/unit_tests)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/docs/vulnscan.sigs  ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/vulnscan.sigs
+)
+
+message("PROJECT_NAME              ${PROJECT_NAME}")
+message("PROJECT_SOURCE_DIR        ${PROJECT_SOURCE_DIR}")
+message("CMAKE_SOURCE_DIR          ${CMAKE_SOURCE_DIR}")
+message("CMAKE_CURRENT_SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}")
+message("PROJECT_BINARY_DIR        ${PROJECT_BINARY_DIR}")
+message("CMAKE_BINARY_DIR          ${CMAKE_BINARY_DIR}")
+message("CMAKE_CURRENT_BINARY_DIR  ${CMAKE_CURRENT_BINARY_DIR}")
+message("CMAKE_INSTALL_PREFIX      ${CMAKE_INSTALL_PREFIX}")
+message("CMAKE_RUNTIME_OUTPUT_DIRECTORY      ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}")
+message("CMAKE_LIBRARY_OUTPUT_DIRECTORY      ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}")
